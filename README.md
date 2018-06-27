@@ -1,14 +1,22 @@
 # Rogue
 
-> SSR for React that's quick and invisible
+> SSR for React that's quick (no Webpack!) and invisible (zero configuration!)
 
-## Comparison with other frameworks
+🚧 Under active development 🚧
 
-- **Routing**: Both Roguejs and Razzle+Afterjs use React Router 4. Nextjs plans to switch to it in the future.
-- **SSR source of truth**: Unlike Nextjs that uses your `/pages` directory and Afterjs that uses your `route.js` file, Rougejs uses your `App.js` file as an entry point to find which pages to server render. This means that you can wrap your pages in layouts/transitions/providers, etc. the same way you would in a regular React Application, and staying true to React values, can organize your code however you like.
-**Bunlder**: Nextjs and Razzle+Afterjs have been around longer so they use Webpack. We're new, so we were able choose Parcel as our application bundler. This mean faster build times and a better development experience.
+## Project Goals / Phisolophy 
 
-## Getting Started With Rogue
+With Rouge, the SSR configuration will be nearly invisible to you. You don't need a special `/pages` directory (like Nextjs) or a seperate `routes.js` file (like Afterjs). All you need is the `App.js` entry point you'd usually have. This means that you can handle layouts/transitions/providers, etc. the same way you would in a regular React Application, and staying true to React's values, you can organize your code however you like. 
+
+How come you don't need any upfront route configuration anymore? Since we assue you're using React Router 4 (why wouldn't you be!?), we can walk your component tree and know which routes to code split and server render. 
+
+As an added benefit, because Rogue is a newer framework, we can use Parcel as our application bundler. One of the top complaints of existing SSR frameworks is slow build times, but they'll tell you it's not their fault, they rely on Webpack. Well, we don't! So not only to we avoid maintaining a complex build setup (Parcel is zero configuration too!), but you'll get faster build times and a better developer experience.
+
+TLDR; Parcel + React + React Router 4 + App.js = SSR Heaven
+
+- [Getting Started](#getting-started)
+
+## Getting Started
 
 ### Setup
 
@@ -30,13 +38,10 @@ and add a script to your package.json like this:
 }
 ```
 
-After that, you're `src/App.js` is your main entry point. All you need is to do is export a basic component to get started:
+After that, your `src/App.js` is your main entry point. All you need is to do is export a basic component to get started:
 
 ```
 export default () => <div>Welcome to Rogue.js!</div>
-
 ```
 
 Then just run `npm run dev` and go to `http://localhost:3000`
-
-
