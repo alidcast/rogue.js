@@ -36,19 +36,23 @@ const getBundleOptions = env => ({
   target: env === SERVER ? 'node' : 'browser',
   outDir: env === SERVER ? BUILD_DIR : BUILD_PUBLIC_DIR,
   outFile: BUILD_FILE,
-  publicUrl: './',
+  // https: false
+  // publicUrl: BUILD_PUBLIC_DIR,
   watch: !isProd,
   cache: !isProd,
-  cacheDir: CACHE_DIR,
+  cacheDir: env === SERVER ? `${CACHE_DIR}/server` : `${CACHE_DIR}/client`,
   minify: isProd,
   sourceMaps: isProd,
   hmrHostname: SERVER ? 'server-bundle' : 'client-bundle',
   hmrPort: 0,
+  logLevel: 3,
   detailedReport: true
 })
 
 const defaults = {
-  srcDir: 'src'
+  srcDir: 'src',
+  loadables: true,
+  css: '_none_'
 }
 
 module.exports = function bundler (env) {
@@ -63,7 +67,7 @@ module.exports = function bundler (env) {
 
   // Check if user has certain file, otherwise uses its template.
   // Returns either the target or backup file path.
-  const getOrMakeFile = (targetFile, isEntryFile = false, processTransfer = null) => {
+  const getOrMakeFile = (targetFile, processTransfer = null) => {
     const targetPath = resolveFile(join(opts.srcDir, targetFile))
     // we leave file ext open to user but make sure to return full file name for Parcel
     // otherwise the bundler outFile name doesn't seem to be used 
@@ -72,36 +76,31 @@ module.exports = function bundler (env) {
     const templatePath = resolveOwn(`src/templates/${targetFile}.js`)
     const backupPath = resolveApp(`${TMP_DIR}/${targetFile}.js`)
     transferFile(templatePath, backupPath, processTransfer)
-    // Entry files are for Parcel and must be relative to root
-    // non-entry backup files are found in the same directory
-    return isEntryFile ? fromRootToRogue(`${targetFile}.js`) : `./${targetFile}`
+    return fromRootToRogue(`${targetFile}.js`)
   }
 
   const appPath = fromRogueToSrc('App')
 
   let entryPath
   if (env === SERVER) {
-    const appString = readFileSync(resolveFile(join(opts.srcDir, 'App')), 'utf8')
-    
-    const css = {
-      emotion: appString.indexOf(`from 'emotion`) > -1,
-      styledComponents: appString.indexOf(`from 'styled-components`) > -1
+    const templateVars = { 
+      appPath,
+      loadables: opts.loadables,
+      css: {
+        emotion: opts.css === 'emotion',
+        styledComponents: opts.css === 'styled-components'
+      }
     }
-
-    const documentPath = getOrMakeFile('Document', false)
-    
-    entryPath = getOrMakeFile('server', true, file => {
-      return template(file)({ 
-        css,
-        appPath,
-        documentPath
-      })
+    entryPath = getOrMakeFile('server', file => {
+      return template(file)(templateVars)
     })
   } else if (env === CLIENT) {
-    entryPath = getOrMakeFile('client', true, (file) => {
-      return template(file)({
-        appPath
-      })
+    const templateVars = {
+      appPath,
+      loadables: opts.loadables
+    }
+    entryPath = getOrMakeFile('client', (file) => {
+      return template(file)(templateVars)
     })
   }
 

@@ -1,4 +1,3 @@
-exports.loadPropsFromTree = require('./loadPropsFromTree')
+exports.hydrateApp = require('./hydrateApp')
+exports.renderApp = require('./renderApp')
 exports.renderHtml = require('./renderHtml')
-exports.AppPlaceholder = require('./documentPartials').AppPlaceholder
-exports.SsrDataScript = require('./documentPartials').SsrDataScript

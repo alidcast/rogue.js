@@ -38,7 +38,7 @@ const loadRoute = (switchInstance, url) => {
 // We assume each one will have a `getInitialProps` property. So when we find a component
 // with one, we load the data, and continue recursing. To prevent walking the entire tree
 // we only look at a parent and it's direct children and if neither is loadable we end early. 
-module.exports = async function loadPropsFromTree (App, { req }) {
+module.exports = async function getPropsFromTree (App, { req }) {
   // Example Tree: StaticRouter -> Router -> App -> Switch -> [Route] -> Page
   const parentWhitelist = ['StaticRouter', 'Router', App.name, 'Route']
 

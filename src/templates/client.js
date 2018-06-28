@@ -1,12 +1,8 @@
-import React from 'react'
-import { hydrate } from 'react-dom'
-import { BrowserRouter } from 'react-router-dom'
+import { hydrateApp } from 'rogue'
+<% if (loadables) { %>import { loadComponents } from 'loadable-components'<% } %>
 
 import App from '<%= appPath %>'
 
-hydrate(
-  <BrowserRouter>
-    <App />
-  </BrowserRouter>,
-  document.getElementById('root')
-)
+<% if (loadables) { %>loadComponents().then(() =><% } %>
+  hydrateApp(App)
+<% if (loadables) { %>)<% } %>

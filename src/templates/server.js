@@ -1,6 +1,8 @@
 import express from 'express'
-import { renderHtml } from 'rogue'
+import { renderApp, renderHtml } from 'rogue'
 import { renderToString } from 'react-dom/server'
+
+<% if (loadables) { %> import { getLoadableState } from 'loadable-components/server'<% } %>
 
 <% if (css.emotion) { %>
 import { renderStylesToString } from 'emotion-server'
@@ -9,39 +11,62 @@ import { ServerStyleSheet } from 'styled-components'
 <% } %>
 
 import App from '<%= appPath %>'
-import Document from '<%= documentPath %>'
 
-<% if (css.emotion) { %>
-const renderApp = App => {
-  return renderStylesToString(renderToString(App))
+const processTags = async RoutableApp => {
+  const tags = {}
+
+  <% if (loadables) { %>
+  const loadableState = await getLoadableState(RoutableApp)
+  tags.loadables = loadableState.getScriptTag()
+  <% } %>
+  
+  <% if (css.styledComponents) { %>
+  const sheet = new ServerStyleSheet()
+  const getStylesFromApp = (App) => sheet.collectStyles(RoutableApp)
+  tags.styles = sheet.getStyleTags()
+  <% } %>
+
+  return tags
 }
-<% } else if (css.styledComponents) { %>
-const sheet = new ServerStyleSheet()
-const renderApp = App => {
-  return renderToString(sheet.collectStyles(App))
+
+const processMarkup = markup => {
+  <% if (css.emotion) { %>
+  return renderStylesToString(markup)
+  <% } else { %>
+  return markup
+  <% } %>
 }
-const styles = sheet.getStyleTags()
-<% } else { %>
-const renderApp = App => {
-  return renderToString(App)
-}
-<% } %>
 
 const app = express()
 
 app
-  .use(express.static('public'))
+  
+  .disable('x-powered-by')
+  .use(express.static('./.rogue/build/public'))
   .get('*', async (req, res) => {
 
+    const { markup, data, tags } = await renderApp({
+      req,
+      res,
+      App,
+      processMarkup,
+      processTags
+    })
+    
+    if (res.finished) return // redirected
+  
+    const html = renderHtml({ 
+      markup, 
+      data, 
+      headTags: [
+        <% if (css.styledComponents) { %>tags.styles<% } %>
+      ],
+      bodyTags: [
+        <% if (loadables) { %>tags.loadables<% } %>
+      ] 
+    })
+    
     try {
-      const html = await renderHtml({
-        req,
-        res,
-        Document,
-        App,
-        renderApp,
-        <% if (css.styledComponents) { %>styles<% } %>
-      })
       res.send(html)
     } catch (err) {
       console.log(err)

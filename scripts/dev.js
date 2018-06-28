@@ -2,7 +2,7 @@ process.env.NODE_ENV = 'development'
 
 const http = require('http')
 const bundler = require('../src/bundler/index')
-
+const { rmdir } = require('fs')
 const {
   requireUncached
 } = require('../src/bundler/utils')
@@ -10,6 +10,9 @@ const {
 const {  
   SERVER,
   CLIENT,
+  TMP_DIR,
+  BUILD_DIR,
+  CACHE_DIR,
   BUILD_PATH
 } = require('../src/bundler/constants')
 
@@ -31,7 +34,7 @@ serverBundler.on('buildEnd', () => {
   server.on('request', newApp)
 })
 
-const bundles = Promise.all([serverBundler.bundle(), clientBundler.bundle()])
+const bundles = runBundles([serverBundler, clientBundler])
 
 bundles.then(() => {
   console.log('Bundling success! Starting App...')
@@ -48,5 +51,26 @@ bundles.then(() => {
 .catch(err => {
   if (err && err.message) console.log(err.message)
   process.exit(1)
+  if (existsSync(BUILD_DIR)) rmdir(BUILD_DIR)
+  if (existsSync(CACHE_DIR)) rmdir(TMP_DIR)
+  if (existsSync(TMP_DIR)) rmdir(TMP_DIR)
 })
+
+function runBundles(bundlers) {
+  let bundlePromises = []
+  bundlers.forEach(bundler => {
+    bundlePromises.push(
+      bundler.bundle()
+        .catch(err => {
+          console.log(err)
+          process.exit(1)
+          if (existsSync(BUILD_DIR)) rmdir(BUILD_DIR)
+          if (existsSync(CACHE_DIR)) rmdir(TMP_DIR)
+          if (existsSync(TMP_DIR)) rmdir(TMP_DIR)
+        })
+    )
+  })
+  return Promise.all(bundlePromises)
+}
+
 

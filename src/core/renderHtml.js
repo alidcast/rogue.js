@@ -1,34 +1,31 @@
-const { createElement: h } = require('react')
-const { renderToStaticMarkup } = require('react-dom/server')
-const { StaticRouter } = require('react-router-dom')
-const Helmet = require('react-helmet').default
-const loadPropsFromTree = require('./loadPropsFromTree')
+const serialize = require('serialize-javascript')
+const { Helmet } = require('react-helmet')
+const { APP_ID, DATA_KEY } = require('./constants')
 
-module.exports = async function renderToHtml({ 
-  req, 
-  res, 
-  Document, 
-  App,
-  renderApp,
-  styles
+module.exports = function renderHtml ({ 
+  markup,
+  data,
+  headTags, 
+  bodyTags 
 }) {
-  const context = {}
-  const location = req.url
-
-  const RoutableApp = h(StaticRouter, { context, location }, h(App))
-  
-  const data = await loadPropsFromTree(RoutableApp, { req })
-  if (res.finished) return // redirected 
-
-  // TODO need to call app with app props
-  const appMarkup = renderApp(RoutableApp)
-
   const helmet = Helmet.renderStatic()
-
-  const doc = renderToStaticMarkup(h(Document, { helmet, data, styles }, null))
-  
-  return `
-    <!doctype html> 
-    ${doc.replace('DO NOT DELETE THIS OR YOU WILL BREAK YOUR APP', appMarkup)}
-  `
+  return `<!doctype html> 
+  <html ${helmet.htmlAttributes.toString()}>
+    <head>
+      <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
+      <meta charSet="utf-8" />
+      <title>My App</title>
+      <meta name="viewport" content="width=device-width, initial-scale=1" />
+      ${helmet.title.toString()}
+      ${helmet.meta.toString()}
+      ${helmet.link.toString()}
+      ${(headTags || []).join('/n')}
+    </head>
+    <body ${helmet.bodyAttributes.toString()}>
+      <div id="${APP_ID}">${markup}</div>
+      <script src="bundle.js" defer></script>
+      <script>window.${DATA_KEY} = ${serialize(data)};</script>
+      ${(bodyTags || []).join('/n')}
+    </body>
+  </html>`
 }

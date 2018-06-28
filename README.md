@@ -6,7 +6,7 @@
 
 ## Project Goals / Phisolophy 
 
-With Rouge, the SSR configuration will be nearly invisible to you. You don't need a special `/pages` directory (like Nextjs) or a seperate `routes.js` file (like Afterjs). All you need is the `App.js` entry point you'd usually have. This means that you can wrap your app in layouts/transitions/providers, etc. the same way you would in a regular React Application, and staying true to React's values, you can organize your code however you like. 
+With Rogue, the SSR configuration will be nearly invisible to you. You don't need a special `/pages` directory (like Nextjs) or a seperate `routes.js` file (like Afterjs). All you need is the `App.js` entry point you'd usually have. This means that you can wrap your app in layouts/transitions/providers, etc. the same way you would in a regular React Application, and staying true to React's values, you can organize your code however you like. 
 
 How come you don't need any upfront route configuration anymore? Since we assue you're using React Router 4 (why wouldn't you be!?), we can walk your component tree and know which routes to code split and server render. 
 
@@ -14,12 +14,14 @@ As an added benefit, because Rogue is a newer framework, we can use Parcel as ou
 
 TLDR; Parcel + React + React Router 4 + App.js = SSR Heaven
 
+**Table of Contents**
+
 - [Getting Started](#getting-started)
-- [CSS-in-JS](#css-in-js)
+- [App Configuration](#app-configuration)
+  - [Code Splitting](#code-splitting)
+  - [CSS-in-JS](#css-in-js)
 
-## Getting Started
-
-### Setup
+# Getting Started
 
 Install it:
 
@@ -47,6 +49,36 @@ export default () => <div>Welcome to Rogue.js!</div>
 
 Then just run `npm run dev` and go to `http://localhost:3000`
 
+# App Configuration 
+
+You can configure your app inside the `rogue.config.js` file. Below are the list of enhances we provide for you.
+
+## Code Splitting
+
+Rogue has built in support for code splitting via [loadable-components](https://github.com/smooth-code/loadable-components). We chose it because, aside from preferring its API, it didn't require Webpack to work unlike the other solutions.
+
+Here's an example of how code splitting would work:
+
+```js
+import { Route } from 'react-router'
+import * as Routes from './Routes'
+import loadable from 'loadable-components' // this is the important part
+
+export const Dashboard = loadable(() => import('./Dashboard'))
+export const Landing = loadable(() => import('./Landing'))
+
+export default () => (
+  <Switch>
+    <Route exact path="/" component={Dashboard} />
+     <Route path="/welcome" component={Landing} />
+  </Switch>
+)
+```
+
+Make sure to check out the `loadable-components` documentation for the full API.
+
+Also, if for some reason you'd like to disable code splitting with `loadable-components`, add `loadable: false` to your `rogue.config.js`.
+
 ## CSS-in-JS
 
 Rogue has first class support for [emotion](https://emotion.sh) and [styled-components](https://styled-components.com).
@@ -56,23 +88,20 @@ First, install your chosen library:
 ```bash
 npm install --save styled-components
 // or
-npm install --save emotion react-emotion emotion-theming
+npm install --save emotion react-emotion emotion-theming emotion-server
 ```
 
-Then, import the libraries' ThemeProvider in your `App.js` file. That's it! We'll read the file and check for which one you have so that we can SSR the styles for you. 
+Then, specify specific library in the `css` option inside `rogue.config.js`.
 
-Here's an example:
+For example: 
 
 ```js
-import { ThemeProvider } from 'emotion-theming'
-// or 
-import { ThemeProvider } from 'styled-components'
-
-export default () => (
-  <ThemeProvider theme={}>
-    <App />
-  </ThemeProvider>
-)
+// rogue.config.js
+module.exports = {
+  css: 'emotion'
+  // or 
+  css: 'styled-components'
+}
 ```
 
-*Note: you don't need to import the `ThemeProvider` specifically, just any package from your chosen library so that we can read the from statement and know which one you're using.*
+That's it; now you have SSR support for your styles, so style away!
