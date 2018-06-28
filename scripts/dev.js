@@ -13,7 +13,6 @@ const {
   BUILD_PATH
 } = require('../src/bundler/constants')
 
-
 const port = process.env.PORT || 3000
 
 const getApp = () => requireUncached(BUILD_PATH).default

@@ -10,7 +10,7 @@ const isSwitch = el => el.type && el.type.name === 'Switch'
 const isLoadable = el => el.type && typeof el.type.getInitialProps === 'function'
 
 const getRouteProps = el => {
-  const { path: pathProp, exact, strict, sensitive, from } = el
+  const { path: pathProp, exact, strict, sensitive, from } = el.props
   const path = pathProp || from
   return { path, exact, strict, sensitive }
 }
@@ -21,7 +21,7 @@ const loadRoute = (switchInstance, url) => {
   
   let match = null, component = null
   React.Children.forEach(routes, routeElement => {
-    if (match ||  !React.isValidElement(routeElement)) return
+    if (match || !React.isValidElement(routeElement)) return
     match = matchPath(
       parseUrl(url).pathname, 
       getRouteProps(routeElement), 
@@ -38,7 +38,7 @@ const loadRoute = (switchInstance, url) => {
 // We assume each one will have a `getInitialProps` property. So when we find a component
 // with one, we load the data, and continue recursing. To prevent walking the entire tree
 // we only look at a parent and it's direct children and if neither is loadable we end early. 
-module.exports = function loadPropsFromTree (App, { req }) {
+module.exports = async function loadPropsFromTree (App, { req }) {
   // Example Tree: StaticRouter -> Router -> App -> Switch -> [Route] -> Page
   const parentWhitelist = ['StaticRouter', 'Router', App.name, 'Route']
 
@@ -49,9 +49,13 @@ module.exports = function loadPropsFromTree (App, { req }) {
     if (compProps) props = Object.assign({}, props, compProps)
   }
 
+  // We load the route via the Switch components children so we have to make
+  // sure we don't load it twice as we continue to walk down tree
+  // note: seenRoutes can be null if no route was matched
   let seenRoutes = []
-  const hasAlreadySeen = comp => comp && (seenRoutes.find(r => r.name === comp.name) !== undefined)
-  walkTree(App, async (element, instance) => {
+  const hasAlreadySeen = comp => comp && (seenRoutes.find(r => r && (r.name === comp.name)) !== undefined)
+
+  await walkTree(App, async (element, instance) => {
     if (seenRoutes.length === 2) return false
     else if (isSimpleElement(element) || parentWhitelist.indexOf(element.type.name) > -1) return true
     
