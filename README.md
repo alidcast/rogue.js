@@ -51,26 +51,28 @@ Then just run `npm run dev` and go to `http://localhost:3000`
 
 Rogue has first class support for [emotion](https://emotion.sh) and [styled-components](https://styled-components.com).
 
+First, install your chosen library: 
+
 ```bash
 npm install --save styled-components
 // or
 npm install --save emotion react-emotion emotion-theming
 ```
 
-After that, all you have to do is import one of our style providers in your `App.js` file. 
+Then, import the libraries' ThemeProvider in your `App.js` file. That's it! We'll read the file and check for which one you have so that we can SSR the styles for you. 
 
 Here's an example:
 
 ```js
-import StylesProvider from 'rogue/providers/emotion'
+import { ThemeProvider } from 'emotion-theming'
 // or 
-import StylesProvider from 'rogue/providers/styled-components'
+import { ThemeProvider } from 'styled-components'
 
 export default () => (
-  <StylesProvider theme={theme}>
+  <ThemeProvider theme={}>
     <App />
-  </StylesProvider>
+  </ThemeProvider>
 )
 ```
 
-The above `StyleProvider` is actually the same as the `ThemeProvider` you're chosen library providers, but we ask you to import it via our package since that's how we know for sure that you'd like us to SSR your styles. 
+*Note: you don't need to import the `ThemeProvider` specifically, just any package from your chosen library so that we can read the from statement and know which one you're using.*

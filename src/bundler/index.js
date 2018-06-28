@@ -84,8 +84,8 @@ module.exports = function bundler (env) {
     const appString = readFileSync(resolveFile(join(opts.srcDir, 'App')), 'utf8')
     
     const css = {
-      emotion: appString.indexOf('rogue/providers/emotion') > -1,
-      styledComponents: appString.indexOf('rogue/providers/styled-components') > -1
+      emotion: appString.indexOf(`from 'emotion`) > -1,
+      styledComponents: appString.indexOf(`from 'styled-components`) > -1
     }
 
     const documentPath = getOrMakeFile('Document', false)
