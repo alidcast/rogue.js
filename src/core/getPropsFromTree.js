@@ -37,7 +37,9 @@ const loadRoute = (switchInstance, url) => {
 // There are three types of element's we're looking to load: Providers, Layouts, and Pages.
 // We assume each one will have a `getInitialProps` property. So when we find a component
 // with one, we load the data, and continue recursing. To prevent walking the entire tree
-// we only look at a parent and it's direct children and if neither is loadable we end early. 
+// we only look at a parent and it's direct children and if neither is loadable we end early.
+
+// TODO need a way to prevent walking entire tree when app has no layout or in general switch statement
 module.exports = async function getPropsFromTree (App, { req }) {
   // Example Tree: StaticRouter -> Router -> App -> Switch -> [Route] -> Page
   const parentWhitelist = ['StaticRouter', 'Router', App.name, 'Route']

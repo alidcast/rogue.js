@@ -1,20 +1,18 @@
 const serialize = require('serialize-javascript')
-const { Helmet } = require('react-helmet')
 const { APP_ID, DATA_KEY } = require('./constants')
 
-module.exports = function renderHtml ({ 
+module.exports = function renderHtml ({
+  helmet, 
   markup,
   data,
   headTags, 
   bodyTags 
 }) {
-  const helmet = Helmet.renderStatic()
   return `<!doctype html> 
   <html ${helmet.htmlAttributes.toString()}>
     <head>
       <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
       <meta charSet="utf-8" />
-      <title>My App</title>
       <meta name="viewport" content="width=device-width, initial-scale=1" />
       ${helmet.title.toString()}
       ${helmet.meta.toString()}

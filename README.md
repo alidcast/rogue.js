@@ -18,6 +18,7 @@ TLDR; Parcel + React + React Router 4 + App.js = SSR Heaven
 
 - [Getting Started](#getting-started)
 - [App Configuration](#app-configuration)
+  - [Document Tags](#document-tags)
   - [Code Splitting](#code-splitting)
   - [CSS-in-JS](#css-in-js)
 
@@ -53,16 +54,52 @@ Then just run `npm run dev` and go to `http://localhost:3000`
 
 You can configure your app inside the `rogue.config.js` file. Below are the list of enhances we provide for you.
 
+## Document Tags 
+
+Rogue setups [react-helmet](https://github.com/nfl/react-helmet) for you so that you can manage your document tags (`title`, `link`, `script` etc.) from anywhere in your component tree.
+
+Check out their documentation for usage, but here's a basic example: 
+
+```js
+// App.js
+import { Helmet } from 'react-helmet'
+
+export default () => (
+  <React.Fragment>
+    <Helmet>
+      <title> My Amazing App! </title>
+    </Helmet>
+  </React.Fragment>
+)
+```
+
+
 ## Code Splitting
 
 Rogue has built in support for code splitting via [loadable-components](https://github.com/smooth-code/loadable-components). We chose it because, aside from preferring its API, it didn't require Webpack to work unlike the other solutions.
 
-Here's an example of how code splitting would work:
+First, install it: 
+
+```
+npm install --save loadable-components
+```
+
+Configure your `.babelrc` to handle the code split files:
+
+```
+{
+  plugins: [
+    "dynamic-import-node",
+    "loadable-components/babel"
+  ]
+}
+```
+
+Then, use it anywhere in your application. Here's an example:
 
 ```js
 import { Route } from 'react-router'
-import * as Routes from './Routes'
-import loadable from 'loadable-components' // this is the important part
+import loadable from 'loadable-components'
 
 export const Dashboard = loadable(() => import('./Dashboard'))
 export const Landing = loadable(() => import('./Landing'))
@@ -70,12 +107,12 @@ export const Landing = loadable(() => import('./Landing'))
 export default () => (
   <Switch>
     <Route exact path="/" component={Dashboard} />
-     <Route path="/welcome" component={Landing} />
+    <Route path="/welcome" component={Landing} />
   </Switch>
 )
 ```
 
-Make sure to check out the `loadable-components` documentation for the full API.
+Make sure to check out the `loadable-components` documentation for the full API. (Don't worry about the server rendering parts of it, we do that for you.)
 
 Also, if for some reason you'd like to disable code splitting with `loadable-components`, add `loadable: false` to your `rogue.config.js`.
 
@@ -91,7 +128,7 @@ npm install --save styled-components
 npm install --save emotion react-emotion emotion-theming emotion-server
 ```
 
-Then, specify specific library in the `css` option inside `rogue.config.js`.
+Then, specify it in the `css` option inside `rogue.config.js`.
 
 For example: 
 
@@ -105,3 +142,4 @@ module.exports = {
 ```
 
 That's it; now you have SSR support for your styles, so style away!
+

@@ -18,59 +18,41 @@ const {
 
 const port = process.env.PORT || 3000
 
-const getApp = () => requireUncached(BUILD_PATH).default
-
+let server 
+let currentApp = null
 const serverBundler = bundler(SERVER)
 const clientBundler = bundler(CLIENT)
 
-let server 
-let currentApp = null
+const getApp = () => requireUncached(BUILD_PATH).default
 
-serverBundler.on('buildEnd', () => {
+const bundleApp = async () => {
+  try {
+    // we run the bundles one at a time to avoid compilation problems with Parcel
+    await clientBundler.bundle()
+    await serverBundler.bundle()
+    console.log('Bundling success! Starting App...')
+  } catch (err) {
+    if (err && err.message) console.log(err.message)
+    process.exit(1)
+  }
+}
+
+const serveApp = () => {
+  const app = currentApp = getApp()
+  server = http.createServer(app)
+  server.listen(port, error => {
+    if (error) console.log(error)
+    console.log(`🚀 Development server started in port ${port}`)
+  })
+}
+
+const restartApp = () => {
   if (!currentApp) return
   console.log('🔁  HMR Reloading server...')
   server.removeListener('request', currentApp)
   const newApp = currentApp = getApp()
   server.on('request', newApp)
-})
-
-const bundles = runBundles([serverBundler, clientBundler])
-
-bundles.then(() => {
-  console.log('Bundling success! Starting App...')
-  const app = currentApp = getApp()
-
-  server = http.createServer(app)
-
-  server.listen(port, error => {
-    if (error) console.log(error)
-
-    console.log(`🚀 Development server started in port ${port}`)
-  })
-})
-.catch(err => {
-  if (err && err.message) console.log(err.message)
-  process.exit(1)
-  if (existsSync(BUILD_DIR)) rmdir(BUILD_DIR)
-  if (existsSync(CACHE_DIR)) rmdir(TMP_DIR)
-  if (existsSync(TMP_DIR)) rmdir(TMP_DIR)
-})
-
-function runBundles(bundlers) {
-  let bundlePromises = []
-  bundlers.forEach(bundler => {
-    bundlePromises.push(
-      bundler.bundle()
-        .catch(err => {
-          console.log(err)
-          process.exit(1)
-          if (existsSync(BUILD_DIR)) rmdir(BUILD_DIR)
-          if (existsSync(CACHE_DIR)) rmdir(TMP_DIR)
-          if (existsSync(TMP_DIR)) rmdir(TMP_DIR)
-        })
-    )
-  })
-  return Promise.all(bundlePromises)
 }
 
-
+serverBundler.on('buildEnd', restartApp)
+bundleApp().then(serveApp)

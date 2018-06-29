@@ -1,6 +1,7 @@
 import express from 'express'
 import { renderApp, renderHtml } from 'rogue'
 import { renderToString } from 'react-dom/server'
+import { Helmet } from 'react-helmet'
 
 <% if (loadables) { %> import { getLoadableState } from 'loadable-components/server'<% } %>
 
@@ -54,8 +55,11 @@ app
     })
     
     if (res.finished) return // redirected
-  
+    
+    const helmet = Helmet.renderStatic()
+
     const html = renderHtml({ 
+      helmet,
       markup, 
       data, 
       headTags: [

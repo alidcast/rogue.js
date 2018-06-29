@@ -1,7 +1,7 @@
 const { createElement: h, cloneElement: hc } = require('react')
 const { renderToString } = require('react-dom/server')
 const { StaticRouter } = require('react-router-dom')
-const Helmet = require('react-helmet').default
+const { Helmet } = require('react-helmet')
 const getPropsFromTree = require('./getPropsFromTree')
 
 module.exports = async function renderApp({ 
