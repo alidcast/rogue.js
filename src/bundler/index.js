@@ -6,6 +6,7 @@ const { existsSync, mkdirSync, readFileSync } = require('fs')
 const {
   resolveApp,
   resolveOwn,
+  getAndVerifySrcPath,
   separatePathSources,
   transferFile,
   resolveFile
@@ -48,7 +49,7 @@ module.exports = function bundler (env) {
   if (!existsSync(ROGUE_DIR)) mkdirSync(ROGUE_DIR)
   if (!existsSync(TMP_DIR)) mkdirSync(TMP_DIR)
 
-  const srcPath = require(resolveApp('package.json')).main || 'App'
+  const srcPath = getAndVerifySrcPath(['App', 'src/App'])
   const { srcDir, srcFile } = separatePathSources(srcPath)
 
   const fromRootToSrc = (path) => './' + join(srcDir, path).replace(/\\/g, '/')
@@ -70,7 +71,7 @@ module.exports = function bundler (env) {
   }
 
   const appPath = fromRogueToSrc(srcFile)
-  const appFile = readFileSync(resolveFile(srcPath), 'utf8')
+  const appFile = readFileSync(srcPath, 'utf8')
 
   let entryPath
   if (env === SERVER) {

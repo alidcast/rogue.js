@@ -16,11 +16,28 @@ exports.resolveOwn = relativePath => {
 
 // For some reason fs operations don't resolve files without extensions
 // so we check both js and ts extensions and return the one that worked
-exports.resolveFile = (filePath) => {
+const resolveFile = exports.resolveFile = (filePath) => {
   if (fs.existsSync(`${filePath}.js`)) return `${filePath}.js`
   else if (fs.existsSync(`${filePath}.tsx`)) return `${filePath}.tsx`
   else if (fs.existsSync(`${filePath}.ts`)) return `${filePath}.ts`
   else return null
+}
+
+// looks for app entry as specific in 'main' property in package.json or in specific backup paths
+exports.getAndVerifySrcPath = function (defaultPaths) {
+  const pkg = require(resolveApp('package.json'))
+
+  let srcPath 
+  if (pkg.main) {
+    srcPath = resolveFile(pkg.main)
+    if (!srcPath) throw Error(`Could not find your app in '${pgk.main}' as specified in your 'package.json'.`)
+  } else {
+    defaultPaths.forEach(path => {
+      if (!srcPath) srcPath = resolveFile(path)
+    })
+    if (!srcPath) throw Error(`Could not locate your app in your root or 'src/' directory.`)
+  }
+  return srcPath
 }
 
 // E.g. app/src/App -> { srcDir: app/src, srcFile: App }
@@ -36,6 +53,7 @@ exports.transferFile = function (from, to, processFile = null) {
   if (processFile) file = processFile(file)
   fs.writeFileSync(to, file)
  }
+
 
 exports.requireUncached = function (module){
   const appModule = resolveApp(module)

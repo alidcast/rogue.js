@@ -17,6 +17,7 @@ TLDR; React + React Router 4 + Parcel + App.js = SSR Heaven
 **Table of Contents**
 
 - [Getting Started](#getting-started)
+- [Rogue Configuration](#rogue-configuration)
 - [App Customization](#app-customization)
   - [Document Tags](#document-tags)
   - [Code Splitting](#code-splitting)
@@ -51,6 +52,21 @@ export default () => <div>Welcome to Rogue.js!</div>
 ```
 
 Then just run `npm run dev` and go to `http://localhost:3000`
+
+# Rogue Configuration
+
+We want to remain as invisible as possible—so there's no special `rogue.config.js` file. The idea is that once you know the entry point of an application, the rest can be inferred from the code.
+
+Right now, Rogue will look inside your root `./` and `src/` directory for an `App` entry point. Both `.js` and `.tsx` extensions are supported.
+
+If you'd like to configure the entry point, just do what you'd normally do, change the `main` property in your `package.json`:
+
+```
+// package.json
+{
+  "main": "app/src/App"
+}
+```
 
 # App Customization
 
