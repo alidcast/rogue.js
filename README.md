@@ -25,7 +25,7 @@ TLDR; React + React Router 4 + Parcel + App.js = SSR Heaven
   - [State Management](#state-management)
   - [Apollo Graphql](#apollo-graphql)
 
-# Getting Started
+## Getting Started
 
 Install it:
 
@@ -53,7 +53,7 @@ export default () => <div>Welcome to Rogue.js!</div>
 
 Then just run `npm run dev` and go to `http://localhost:3000`
 
-# Rogue Configuration
+## Rogue Configuration
 
 We want to remain as invisible as possible—so there's no special `rogue.config.js` file. The idea is that once you know the entry point of an application, the rest can be inferred from the code.
 
@@ -68,7 +68,7 @@ If you'd like to configure the entry point, just do what you'd normally do, chan
 }
 ```
 
-# App Customization
+## App Customization
 
 Below are some app customizations that we have SSR support for. 
 
@@ -97,7 +97,7 @@ export default () => (
 )
 ```
 
-## Code Splitting
+### Code Splitting
 
 Rogue has automatic support for code splitting via [loadable-components](https://github.com/smooth-code/loadable-components). 
 
@@ -129,7 +129,7 @@ export default () => (
 )
 ```
 
-## CSS-in-JS
+### CSS-in-JS
 
 Rogue has first class support for [emotion](https://emotion.sh) and [styled-components](https://styled-components.com).
 
@@ -161,7 +161,7 @@ export default withStyles(theme)(App)
 That's it; now you have SSR support for your styles, so style away!
 
 
-## State management
+### State management
 
 Rogue has optional support for [redux](https://github.com/reduxjs/redux).
 
@@ -201,7 +201,7 @@ const App = () => (...)
 export default withStore(createStore)(App)
 ```
 
-## Apollo Graphql
+### Apollo Graphql
 
 Rogue has optional support for [react-apollo](https://github.com/apollographql/react-apollo).
 
@@ -252,3 +252,17 @@ export default compose(
   withStyles(theme)
 )
 ```
+
+## Author
+
+- Alid Castano ([@alidcastano](https://twitter.com/alidcastano))
+
+## Inspiration 
+
+- [Nextjs](https://github.com/zeit/next.js/)
+- [Razzle](https://github.com/jaredpalmer/razzle)+[Afterjs](https://github.com/jaredpalmer/after.js)
+- [Vue](https://github.com/vuejs/vue)/[Nuxtjs](https://github.com/nuxt/nuxt.js)
+
+## Liscense
+
+[MIT](/LICENSE.md)
