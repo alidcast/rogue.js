@@ -23,6 +23,14 @@ exports.resolveFile = (filePath) => {
   else return null
 }
 
+// E.g. app/src/App -> { srcDir: app/src, srcFile: App }
+exports.separatePathSources = (filePath) => {
+  const pathsToFile = filePath.split('/')
+  const srcFile = pathsToFile.pop()
+  const srcDir = pathsToFile.length > 0 ? pathsToFile.join('/') : './'
+  return { srcDir, srcFile }
+}
+
 exports.transferFile = function (from, to, processFile = null) {
   let file = fs.readFileSync(from, 'utf8')
   if (processFile) file = processFile(file)

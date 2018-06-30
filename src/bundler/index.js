@@ -6,6 +6,7 @@ const { existsSync, mkdirSync, readFileSync } = require('fs')
 const {
   resolveApp,
   resolveOwn,
+  separatePathSources,
   transferFile,
   resolveFile
 } = require('./utils')
@@ -24,14 +25,6 @@ const {
 
 const isProd = process.env.NODE_ENV === 'production'
 
-const getConfig = () => {
-  let config = {}
-  if (existsSync(CONFIG_FILE)) {
-    config = require(resolve(CONFIG_FILE))
-  }
-  return config
-}
-
 const getBundleOptions = env => ({
   target: env === SERVER ? 'node' : 'browser',
   outDir: env === SERVER ? BUILD_DIR : BUILD_PUBLIC_DIR,
@@ -49,26 +42,23 @@ const getBundleOptions = env => ({
   detailedReport: true
 })
 
-const defaults = {
-  srcDir: 'src',
-  loadables: true,
-  css: '_none_'
-}
-
+// TODO read files again for config data
+// and see main.js for App entry point
 module.exports = function bundler (env) {
   if (!existsSync(ROGUE_DIR)) mkdirSync(ROGUE_DIR)
   if (!existsSync(TMP_DIR)) mkdirSync(TMP_DIR)
 
-  const opts = Object.assign({}, defaults, getConfig())
+  const srcPath = require(resolveApp('package.json')).main || 'App'
+  const { srcDir, srcFile } = separatePathSources(srcPath)
 
-  const fromRootToSrc = (path) => './' + join(opts.srcDir, path).replace(/\\/g, '/')
+  const fromRootToSrc = (path) => './' + join(srcDir, path).replace(/\\/g, '/')
   const fromRootToRogue = (path) => './' + join(`${TMP_DIR}`, path).replace(/\\/g, '/')
-  const fromRogueToSrc = (path) =>  '../../' + join(opts.srcDir, path).replace(/\\/g, '/')
+  const fromRogueToSrc = (path) =>  '../../' + join(srcDir, path).replace(/\\/g, '/')
 
-  // Check if user has certain file, otherwise uses its template.
+  // Check if user has certain file, otherwise use its template.
   // Returns either the target or backup file path.
   const getOrMakeFile = (targetFile, processTransfer = null) => {
-    const targetPath = resolveFile(join(opts.srcDir, targetFile))
+    const targetPath = resolveFile(join(srcDir, targetFile))
     // we leave file ext open to user but make sure to return full file name for Parcel
     // otherwise the bundler outFile name doesn't seem to be used 
     if (targetPath) return fromRootToSrc(targetPath)
@@ -79,16 +69,16 @@ module.exports = function bundler (env) {
     return fromRootToRogue(`${targetFile}.js`)
   }
 
-  const appPath = fromRogueToSrc('App')
+  const appPath = fromRogueToSrc(srcFile)
+  const appFile = readFileSync(resolveFile(srcPath), 'utf8')
 
   let entryPath
   if (env === SERVER) {
     const templateVars = { 
       appPath,
-      loadables: opts.loadables,
       css: {
-        emotion: opts.css === 'emotion',
-        styledComponents: opts.css === 'styled-components'
+        emotion: appFile.indexOf('rogue/hocs/emotion') > -1,
+        styledComponents: appFile.indexOf('rogue/hocs/styled-components') > -1
       }
     }
     entryPath = getOrMakeFile('server', file => {
@@ -96,8 +86,7 @@ module.exports = function bundler (env) {
     })
   } else if (env === CLIENT) {
     const templateVars = {
-      appPath,
-      loadables: opts.loadables
+      appPath
     }
     entryPath = getOrMakeFile('client', (file) => {
       return template(file)(templateVars)

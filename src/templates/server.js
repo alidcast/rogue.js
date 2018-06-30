@@ -2,8 +2,7 @@ import express from 'express'
 import { renderApp, renderHtml } from 'rogue'
 import { renderToString } from 'react-dom/server'
 import { Helmet } from 'react-helmet'
-
-<% if (loadables) { %> import { getLoadableState } from 'loadable-components/server'<% } %>
+import { getLoadableState } from 'loadable-components/server'
 
 <% if (css.emotion) { %>
 import { renderStylesToString } from 'emotion-server'
@@ -16,10 +15,8 @@ import App from '<%= appPath %>'
 const processTags = async RoutableApp => {
   const tags = {}
 
-  <% if (loadables) { %>
   const loadableState = await getLoadableState(RoutableApp)
   tags.loadables = loadableState.getScriptTag()
-  <% } %>
   
   <% if (css.styledComponents) { %>
   const sheet = new ServerStyleSheet()
@@ -41,8 +38,8 @@ const processMarkup = markup => {
 const app = express()
 
 app
-  
   .disable('x-powered-by')
+  // TODO make dynamic
   .use(express.static('./.rogue/build/public'))
   .get('*', async (req, res) => {
 
@@ -66,7 +63,7 @@ app
         <% if (css.styledComponents) { %>tags.styles<% } %>
       ],
       bodyTags: [
-        <% if (loadables) { %>tags.loadables<% } %>
+        tags.loadables
       ] 
     })
     

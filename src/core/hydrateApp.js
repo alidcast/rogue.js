@@ -4,18 +4,15 @@ const { BrowserRouter } = require('react-router-dom')
 const { APP_ID, DATA_KEY } = require('./constants')
 
 function getSsrData () {
-  let data = {}
-  if (typeof window !== undefined) {
-    data = JSON.parse(window[DATA_KEY])
-  }
-  return data
+  return typeof window !== undefined 
+    ? JSON.parse(window[DATA_KEY]) 
+    : {}
 }
 
 module.exports = function hydrateApp (App) {
-  const data = getSsrData()
-
+  const props = getSsrData()
   return hydrate(
-    h(BrowserRouter, {}, h(App, data)), 
+    h(BrowserRouter, {}, h(App, props)), 
     document.getElementById(APP_ID)
   )   
 }

@@ -38,16 +38,17 @@ const loadRoute = (switchInstance, url) => {
 // We assume each one will have a `getInitialProps` property. So when we find a component
 // with one, we load the data, and continue recursing. To prevent walking the entire tree
 // we only look at a parent and it's direct children and if neither is loadable we end early.
-
-// TODO need a way to prevent walking entire tree when app has no layout or in general switch statement
-module.exports = async function getPropsFromTree (App, { req }) {
+module.exports = async function getPropsFromTree (App, ctx) {
+  console.log('fix me....')
+  console.log(ctx.req.url)
   // Example Tree: StaticRouter -> Router -> App -> Switch -> [Route] -> Page
   const parentWhitelist = ['StaticRouter', 'Router', App.name, 'Route']
 
+  
   let props = {}
   async function loadProps (component) {
     if (!component || !component.getInitialProps) return
-    const compProps = await component.getInitialProps()
+    const compProps = await component.getInitialProps(ctx)
     if (compProps) props = Object.assign({}, props, compProps)
   }
 
@@ -57,20 +58,29 @@ module.exports = async function getPropsFromTree (App, { req }) {
   let seenRoutes = []
   const hasAlreadySeen = comp => comp && (seenRoutes.find(r => r && (r.name === comp.name)) !== undefined)
 
+  // To prevent walking entire tree, e.g. if there's no second switch statement,
+  // we keep track of steps walked since last loaded component
+  let stepsSinceLastLoaded = 0
+
   await walkTree(App, async (element, instance) => {
-    if (seenRoutes.length === 2) return false
+    if (seenRoutes.length === 2 || stepsSinceLastLoaded === 3) return false
     else if (isSimpleElement(element) || parentWhitelist.indexOf(element.type.name) > -1) return true
     
     const switchInstance = isSwitch(element) && instance
     const loadableComponent = isLoadable(element) && element.type
 
     if (switchInstance) {
-      const component = loadRoute(switchInstance, req.url)
+      const component = loadRoute(switchInstance, ctx.req.url)
       await loadProps(component)
       seenRoutes.push(component)
+      stepsSinceLastLoaded = 0
     } else if (loadableComponent && !hasAlreadySeen(loadableComponent)) {
       await loadProps(loadableComponent)
+      stepsSinceLastLoaded = 0
+    } else {
+      stepsSinceLastLoaded++
     }
+
     return true
   })
 
