@@ -8,7 +8,7 @@
 
 With Rogue, the SSR configuration will be nearly invisible to you. You don't need a special `/pages` directory (like Nextjs) or a seperate `routes.js` file (like Afterjs). All you need is the `App.js` entry point you'd usually have. This means that you can wrap your app in layouts/transitions/providers, etc. the same way you would in a regular React Application, and staying true to React's values, you can organize your code however you like. 
 
-How come you don't need any upfront route configuration anymore? Since we assue you're using React Router 4 (why wouldn't you be!?), we can walk your component tree and use the same logic as your router to know which routes will be called so that we can handle SSR for them.
+How come you don't need any upfront route configuration anymore? Since we assume you're using React Router 4 (why wouldn't you be!?), we can walk your component tree and use the same logic as your router to know which routes will be called so that we can handle SSR for them.
 
 As an added benefit, because Rogue is a newer framework, we can use Parcel as our application bundler. One of the top complaints of existing SSR frameworks is slow build times, but they'll tell you it's not their fault, they rely on Webpack. Well, we don't! So not only to we avoid maintaining a complex build setup (Parcel is zero configuration too!), but you'll get faster build times and a better developer experience.
 
@@ -24,6 +24,10 @@ TLDR; React + React Router 4 + Parcel + App.js = SSR Heaven
   - [CSS-in-JS](#css-in-js)
   - [State Management](#state-management)
   - [Apollo Graphql](#apollo-graphql)
+- [App Recipes](#app-recipes)
+  - [Environment Variables](#environment-variables)
+  - [Path Resolution](#path-resolution)
+  - [Using with Typescript](#using-with-typescript)
 
 ## Getting Started
 
@@ -251,6 +255,100 @@ export default compose(
   withStore(createStore),
   withStyles(theme)
 )
+```
+
+## App Recipes
+
+### Environment Variables 
+
+You'll often have to use secrets, or environment variables, in your application. This is done inside `.env` files, which Parcel has built-in support for.
+
+For example, this configuration: 
+```
+// .env
+API_URL='http://localhost:4000/graphql'
+```
+
+Can be accessed as:
+
+```
+process.env.API_URL 
+```
+
+You can also set varaibles based on your environment, as Parcel will also load the `.env` file with the suffix of your current `NODE_ENV`. So, in production, it will load `.env.production` (make sure to add this file to your `.gitignore`!)
+
+#### Isomorphic Variables
+
+The only problem is that this is an isomorphic application and `process.env` belongs to the server. So if you'd like to use specific environment in your client side, you'll to use Babel to replace these variables at build time.
+
+Install [babel-plugin-transform-define](https://github.com/FormidableLabs/babel-plugin-transform-define):
+
+```
+npm install --save-dev babel-plugin-transform-define
+```
+
+And add your isomorphic variables to your `.babelrc` configuration:
+
+```
+// .babelrc
+{
+  plugins: [
+    ["transform-define",{  
+      "process.env.API_URL": http://localhost:4000/graphql
+    }],
+  ]
+}
+```
+
+### Path Resolution 
+
+It's ugly and messy to have set long, relative paths like this: `../../../my-far-away-module`.
+
+We recommend you use [babel-plugin-module-resolver](https://github.com/tleunen/babel-plugin-module-resolver) and standardize a way to resolve paths in your application.
+
+First, install it:
+
+```
+npm install --save-dev babel-plugin-module-resolver
+```
+
+Then, configure it in your `.babelrc`. Here's an example: 
+
+```json
+// .babelrc
+{
+  plugins: [
+    ["module-resolver", {
+      "root": ["./src"],
+      "alias": { 
+        "~": "./src" 
+      }
+    }]
+  ]
+}
+```
+
+### Using with Typescript
+
+Parcel has built-in support for Typescript. All you have to do is create a file with a `.ts` or `.tsx` extension and your code will automatically be compiled based on your `tsconfig.json` configuration.
+
+Here are a few options we recommend you have:
+
+```
+{
+  "compilerOptions": {
+    // preserve JSX so that babel can handle it and you can take advantage of plugin transformations
+    "jsx": "preserve",
+    // resolve your modules to esnext so that dynamic imports and code splitting can work
+    "target": "esnext",
+    "module": "esnext",
+    // make sure you map the paths you configured with babel for autocompletion to work
+    "baseUrl": "./src",
+    "paths": {
+      "~/*": ["*"]
+    }
+  }
+}
 ```
 
 ## Author
