@@ -2,7 +2,7 @@
 
 > SSR for React that's invisible (zero configuration!) and quick (no Webpack!)
 
-🚧 Under active development 🚧
+🚧 Under construction 🚧
 
 ## Project Goals / Phisolophy 
 
@@ -279,7 +279,7 @@ You can also set varaibles based on your environment, as Parcel will also load t
 
 #### Isomorphic Variables
 
-The only problem is that this is an isomorphic application and `process.env` belongs to the server. So if you'd like to use specific environment in your client side, you'll to use Babel to replace these variables at build time.
+The only problem is that this is an isomorphic application and `process.env` belongs to the server. So if you'd like to use specific environment in your client side, you'll need to have Babel to replace these variables at build time.
 
 Install [babel-plugin-transform-define](https://github.com/FormidableLabs/babel-plugin-transform-define):
 
@@ -289,13 +289,13 @@ npm install --save-dev babel-plugin-transform-define
 
 And add your isomorphic variables to your `.babelrc` configuration:
 
-```
+```json
 // .babelrc
 {
-  plugins: [
+  "plugins": [
     ["transform-define",{  
-      "process.env.API_URL": http://localhost:4000/graphql
-    }],
+      "process.env.API_URL": "http://localhost:4000/graphql"
+    }]
   ]
 }
 ```
@@ -317,7 +317,7 @@ Then, configure it in your `.babelrc`. Here's an example:
 ```json
 // .babelrc
 {
-  plugins: [
+  "plugins": [
     ["module-resolver", {
       "root": ["./src"],
       "alias": { 
@@ -334,7 +334,7 @@ Parcel has built-in support for Typescript. All you have to do is create a file 
 
 Here are a few options we recommend you have:
 
-```
+```js
 {
   "compilerOptions": {
     // preserve JSX so that babel can handle it and you can take advantage of plugin transformations

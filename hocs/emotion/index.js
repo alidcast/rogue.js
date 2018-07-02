@@ -1,16 +1,15 @@
-const { isServer } = require('../../src/core/utils')
-const { resolveApp } = require('../../src/bundler/utils')
+const { isServer } = require('../../index')
 
-const { createElement: h } = require(resolveApp('node_modules/react'))
-const { ThemeProvider } = require(resolveApp('node_modules/emotion-theming'))
+const { createElement: h } = require('react')
+const { ThemeProvider } = require('emotion-theming')
 
 
 const withStyles = (theme = {}) => App => {
-  function StyleProvider (props) {
+  function RogueStyleProvider (props) {
     return h(ThemeProvider, { theme }, h(App, props))
   }
 
-  return StyleProvider
+  return RogueStyleProvider
 }
 
 module.exports = withStyles 

@@ -1,18 +1,16 @@
+process.env.BABEL_ENV = 'development'
 process.env.NODE_ENV = 'development'
 
 const http = require('http')
-const bundler = require('../src/bundler/index')
 const { rmdir } = require('fs')
-const {
-  requireUncached
-} = require('../src/bundler/utils')
+const { requireUncached } = require('../src/bundler/utils')
+
+const bundler = require('../src/bundler/index')
+const { bundleApp } = require('./common')
 
 const {  
   SERVER,
   CLIENT,
-  TMP_DIR,
-  BUILD_DIR,
-  CACHE_DIR,
   BUILD_PATH
 } = require('../src/bundler/constants')
 
@@ -25,18 +23,6 @@ const clientBundler = bundler(CLIENT)
 
 const getApp = () => requireUncached(BUILD_PATH).default
 
-const bundleApp = async () => {
-  try {
-    // we run the bundles one at a time to avoid compilation problems with Parcel
-    await clientBundler.bundle()
-    await serverBundler.bundle()
-    console.log('Bundling success! Starting App...')
-  } catch (err) {
-    if (err && err.message) console.log(err.message)
-    process.exit(1)
-  }
-}
-
 const serveApp = () => {
   const app = currentApp = getApp()
   server = http.createServer(app)
@@ -46,13 +32,21 @@ const serveApp = () => {
   })
 }
 
-const restartApp = () => {
-  if (!currentApp) return
+const restartApp = async () => {
+  if (!currentApp) return // initial bundle
+
+  // Watch mode is disabled for client so we handle rebundling it ourselves
+  console.log('Rebuilding client...')
+  await clientBundler.bundle()
+
   console.log('🔁  HMR Reloading server...')
   server.removeListener('request', currentApp)
   const newApp = currentApp = getApp()
   server.on('request', newApp)
 }
 
-serverBundler.on('buildEnd', restartApp)
-bundleApp().then(serveApp)
+serverBundler.on('bundled', restartApp)
+bundleApp(clientBundler, serverBundler).then(() => {
+  console.log('Starting App...')
+  serveApp()
+})

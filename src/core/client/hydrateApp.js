@@ -1,11 +1,11 @@
 const { createElement: h } = require('react')
 const { hydrate } = require('react-dom')
 const { BrowserRouter } = require('react-router-dom')
-const { APP_ID, DATA_KEY } = require('./constants')
+const { APP_ID, DATA_KEY } = require('../constants')
 
 function getSsrData () {
   return typeof window !== undefined 
-    ? JSON.parse(window[DATA_KEY]) 
+    ? window[DATA_KEY]
     : {}
 }
 

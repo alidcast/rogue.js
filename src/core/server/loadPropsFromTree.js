@@ -33,14 +33,7 @@ const loadRoute = (switchInstance, url) => {
   return component
 } 
 
-// Walk App and load data from `getInitialProps`
-// There are three types of element's we're looking to load: Providers, Layouts, and Pages.
-// We assume each one will have a `getInitialProps` property. So when we find a component
-// with one, we load the data, and continue recursing. To prevent walking the entire tree
-// we only look at a parent and it's direct children and if neither is loadable we end early.
 module.exports = async function getPropsFromTree (App, ctx) {
-  console.log('fix me....')
-  console.log(ctx.req.url)
   // Example Tree: StaticRouter -> Router -> App -> Switch -> [Route] -> Page
   const parentWhitelist = ['StaticRouter', 'Router', App.name, 'Route']
 
@@ -58,14 +51,24 @@ module.exports = async function getPropsFromTree (App, ctx) {
   let seenRoutes = []
   const hasAlreadySeen = comp => comp && (seenRoutes.find(r => r && (r.name === comp.name)) !== undefined)
 
-  // To prevent walking entire tree, e.g. if there's no second switch statement,
-  // we keep track of steps walked since last loaded component
+  // To prevent walking entire tree we keep track of steps walked since last loaded component
   let stepsSinceLastLoaded = 0
 
   await walkTree(App, async (element, instance) => {
-    if (seenRoutes.length === 2 || stepsSinceLastLoaded === 3) return false
-    else if (isSimpleElement(element) || parentWhitelist.indexOf(element.type.name) > -1) return true
-    
+    // This is a bit hacky but we assume we're walking a layout->page setup, so ideally, we continue
+    // recursing until we've seen two switch routes; however, if there's no layout, we don't want to 
+    // walk entire tree, so we'll stop after we've seen five non-loadable components.
+    // And since there's no reason why there shouldn't be at least one switch route, so in that case we'll 
+    // keep walking until we find it.
+    if (seenRoutes.length === 2 || (seenRoutes.length === 1 && stepsSinceLastLoaded === 5)) return false
+    else if (isSimpleElement(element)) {
+      stepsSinceLastLoaded++
+      return true 
+    } else if (
+      // Allow element in whitelist to pass unless it's custom user component that needs processing
+      parentWhitelist.indexOf(element.type.name) > -1 && !element.type.getInitialProps
+    ) return true
+
     const switchInstance = isSwitch(element) && instance
     const loadableComponent = isLoadable(element) && element.type
 

@@ -1,7 +1,7 @@
 const Bundler = require('parcel-bundler')
 const template = require('lodash/template')
 const { join, resolve } = require('path')
-const { existsSync, mkdirSync, readFileSync } = require('fs')
+const { existsSync, mkdirSync, readFileSync, ensureDir, copySync } = require('fs-extra')
 
 const {
   resolveApp,
@@ -30,9 +30,11 @@ const getBundleOptions = env => ({
   target: env === SERVER ? 'node' : 'browser',
   outDir: env === SERVER ? BUILD_DIR : BUILD_PUBLIC_DIR,
   outFile: BUILD_FILE,
-  // https: false
-  // publicUrl: BUILD_PUBLIC_DIR,
-  watch: !isProd,
+  publicUrl: BUILD_PUBLIC_DIR, // ?
+  // on client we disabled watch because we will be serving app oursevles and Parcel
+  // includes a process.env.HMR_HOSTNAME variable in bundle if watch mode is enabled
+  // (we configure HRM for the client bundle in the rogue scripts)
+  watch: !isProd && env === SERVER,
   cache: !isProd,
   cacheDir: env === SERVER ? `${CACHE_DIR}/server` : `${CACHE_DIR}/client`,
   minify: isProd,
@@ -40,14 +42,23 @@ const getBundleOptions = env => ({
   hmrHostname: SERVER ? 'server-bundle' : 'client-bundle',
   hmrPort: 0,
   logLevel: 3,
-  detailedReport: true
+  detailedReport: isProd
 })
 
-// TODO read files again for config data
-// and see main.js for App entry point
+
+function prepBuild () {
+  // create build dirs
+  ensureDir(ROGUE_DIR)
+  ensureDir(TMP_DIR)
+
+  // copy over public assets
+  copySync(resolveApp('public'), resolveApp(BUILD_PUBLIC_DIR), {
+    dereference: true,
+  })
+}
+
 module.exports = function bundler (env) {
-  if (!existsSync(ROGUE_DIR)) mkdirSync(ROGUE_DIR)
-  if (!existsSync(TMP_DIR)) mkdirSync(TMP_DIR)
+  prepBuild()
 
   const srcPath = getAndVerifySrcPath(['App', 'src/App'])
   const { srcDir, srcFile } = separatePathSources(srcPath)

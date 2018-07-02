@@ -1,11 +1,11 @@
 {
   "name": "rogue",
-  "version": "0.0.6",
+  "version": "0.1.0",
   "description": "A SSR experience for React that is quick and invisible",
   "repository": "https://github.com/alidcastano/rogue",
   "author": "Alid Castano",
   "license": "MIT",
-  "main": "src/core/index.js",
+  "main": "index.js",
   "bin": {
     "rogue": "./bin/rogue"
   },
@@ -22,6 +22,7 @@
     "react-router-dom": "^4.3.1"
   },
   "dependencies": {
+    "babel-polyfill": "^6.26.0",
     "connect": "^3.6.6",
     "isomorphic-unfetch": "^2.0.0",
     "lodash": "^4.17.10",
@@ -32,15 +33,18 @@
     "serialize-javascript": "^1.5.0"
   },
   "devDependencies": {
-    "babel-core": "^6.26.3",
-    "babel-plugin-external-helpers": "^6.22.0",
-    "babel-preset-env": "^1.7.0",
-    "babel-preset-react": "^6.24.1",
-    "babel-preset-stage-2": "^6.24.1",
+    "apollo-boost": "^0.1.10",
+    "emotion-theming": "^9.2.4",
+    "fs-extra": "^6.0.1",
+    "graphql": "^0.13.2",
+    "graphql-tag": "^2.9.2",
     "jest": "^23.2.0",
     "react": "^16.4.1",
+    "react-apollo": "^2.1.8",
     "react-dom": "^16.4.1",
+    "react-redux": "^5.0.7",
     "react-router-dom": "^4.3.1",
-    "react-test-renderer": "^16.4.1"
+    "react-test-renderer": "^16.4.1",
+    "redux": "^4.0.0"
   }
 }

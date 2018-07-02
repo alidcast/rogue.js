@@ -1,5 +1,5 @@
 const serialize = require('serialize-javascript')
-const { APP_ID, DATA_KEY } = require('./constants')
+const { APP_ID, DATA_KEY } = require('../constants')
 
 module.exports = function renderHtml ({
   helmet, 

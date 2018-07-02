@@ -1,8 +1,9 @@
 import express from 'express'
-import { renderApp, renderHtml } from 'rogue'
+import { renderApp, renderHtml } from 'rogue/server'
 import { renderToString } from 'react-dom/server'
 import { Helmet } from 'react-helmet'
 import { getLoadableState } from 'loadable-components/server'
+import { join } from 'path'
 
 <% if (css.emotion) { %>
 import { renderStylesToString } from 'emotion-server'
@@ -37,41 +38,47 @@ const processMarkup = markup => {
 
 const app = express()
 
+const publicDir = join(__dirname, '/public').replace(/\\/g, '/')
+
 app
   .disable('x-powered-by')
   // TODO make dynamic
-  .use(express.static('./.rogue/build/public'))
+  .use(express.static(publicDir))
   .get('*', async (req, res) => {
+    console.log(req.url)
 
-    const { markup, data, tags } = await renderApp({
-      req,
-      res,
-      App,
-      processMarkup,
-      processTags
-    })
-    
-    if (res.finished) return // redirected
-    
-    const helmet = Helmet.renderStatic()
+    // TODO handle source maps
+    if (req.url.match(/.map$/)) return
 
-    const html = renderHtml({ 
-      helmet,
-      markup, 
-      data, 
-      headTags: [
-        <% if (css.styledComponents) { %>tags.styles<% } %>
-      ],
-      bodyTags: [
-        tags.loadables
-      ] 
-    })
-    
     try {
+      const { markup, data, tags } = await renderApp({
+        req,
+        res,
+        App,
+        processMarkup,
+        processTags
+      })
+      
+      if (res.finished) return // redirected
+      
+      const helmet = Helmet.renderStatic()
+  
+      const html = renderHtml({ 
+        helmet,
+        markup, 
+        data, 
+        headTags: [
+          <% if (css.styledComponents) { %>tags.styles<% } %>
+        ],
+        bodyTags: [
+          tags.loadables
+        ] 
+      })
+    
       res.send(html)
     } catch (err) {
-      console.log(err)
-      res.json(err)
+      res.status(500)
+      res.send(err.stack)
     }
   })
 

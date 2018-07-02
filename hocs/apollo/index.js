@@ -1,11 +1,7 @@
-const { isServer } = require('../../src/core/utils')
-const { resolveApp } = require('../../src/bundler/utils')
+const { isServer } = require('../../index')
 
-const { createElement: h } = require(resolveApp('node_modules/react'))
-const { 
-  ApolloProvider: BaseApolloProvider, 
-  getDataFromTree 
-} = require(resolveApp('node_modules/react-apollo'))
+const { createElement: h } = require('react')
+const { ApolloProvider, getDataFromTree } = require('react-apollo')
 
 const APOLLO_CTX = 'apollo'
 
@@ -45,19 +41,19 @@ const withApollo = createClient => App => {
     return apolloClient
   }
 
-  function ApolloProvider (props) {
+  function RogueApolloProvider (props) {
     const client = getOrCreateClient(props.initialApolloState || {})
-    return h(BaseApolloProvider, { client }, h(App, props))
+    return h(ApolloProvider, { client }, h(App, props))
   }
 
-  ApolloProvider.getInitialProps = async function (ctx) {
+  RogueApolloProvider.getInitialProps = async function (ctx) {
     const client = createClient({}, ctx)
     ctx[APOLLO_CTX] = client // provide client to app context
     if (isServer) await initCache(App)
     return { initialApolloState: client.cache.extract() }
   }
 
-  return ApolloProvider
+  return RogueApolloProvider
 }
 
 module.exports = withApollo
