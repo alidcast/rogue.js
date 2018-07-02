@@ -2,7 +2,6 @@ import express from 'express'
 import { renderApp, renderHtml } from 'rogue/server'
 import { renderToString } from 'react-dom/server'
 import { Helmet } from 'react-helmet'
-import { getLoadableState } from 'loadable-components/server'
 import { join } from 'path'
 
 <% if (css.emotion) { %>
@@ -16,9 +15,6 @@ import App from '<%= appPath %>'
 const processTags = async RoutableApp => {
   const tags = {}
 
-  const loadableState = await getLoadableState(RoutableApp)
-  tags.loadables = loadableState.getScriptTag()
-  
   <% if (css.styledComponents) { %>
   const sheet = new ServerStyleSheet()
   const getStylesFromApp = (App) => sheet.collectStyles(RoutableApp)
@@ -38,11 +34,11 @@ const processMarkup = markup => {
 
 const app = express()
 
+// TODO production dir?
 const publicDir = join(__dirname, '/public').replace(/\\/g, '/')
 
 app
   .disable('x-powered-by')
-  // TODO make dynamic
   .use(express.static(publicDir))
   .get('*', async (req, res) => {
     console.log(req.url)

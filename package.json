@@ -25,6 +25,7 @@
     "babel-polyfill": "^6.26.0",
     "connect": "^3.6.6",
     "isomorphic-unfetch": "^2.0.0",
+    "loadable-components": "^2.2.2",
     "lodash": "^4.17.10",
     "parcel-bundler": "^1.9.2",
     "react-dev-utils": "^5.0.1",
