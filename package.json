@@ -1,6 +1,6 @@
 {
   "name": "rogue",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "A SSR experience for React that is quick and invisible",
   "repository": "https://github.com/alidcastano/rogue",
   "author": "Alid Castano",
@@ -31,7 +31,8 @@
     "react-dev-utils": "^5.0.1",
     "react-helmet": "^5.2.0",
     "react-tree-walker": "^4.1.0",
-    "serialize-javascript": "^1.5.0"
+    "serialize-javascript": "^1.5.0",
+    "fs-extra": "^6.0.1"
   },
   "devDependencies": {
     "apollo-boost": "^0.1.10",
@@ -39,7 +40,6 @@
     "babel-preset-env": "^1.7.0",
     "babel-preset-react": "^6.24.1",
     "emotion-theming": "^9.2.4",
-    "fs-extra": "^6.0.1",
     "graphql": "^0.13.2",
     "graphql-tag": "^2.9.2",
     "jest": "^23.2.0",
