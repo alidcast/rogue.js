@@ -4,9 +4,9 @@
 
 🚧 Under construction 🚧
 
-## Project Goals / Phisolophy 
+## Project Goals / Philosophy 
 
-With Rogue, the SSR configuration will be nearly invisible to you. You don't need a special `/pages` directory (like Nextjs) or a seperate `routes.js` file (like Afterjs). All you need is the `App.js` entry point you'd usually have. This means that you can wrap your app in layouts/transitions/providers, etc. the same way you would in a regular React Application, and staying true to React's values, you can organize your code however you like. 
+With Rogue, the SSR configuration will be nearly invisible to you. You don't need a special `/pages` directory (like Nextjs) or a separate `routes.js` file (like Afterjs). All you need is the `App.js` entry point you'd usually have. This means that you can wrap your app in layouts/transitions/providers, etc. the same way you would in a regular React Application, and staying true to React's values, you can organize your code however you like. 
 
 How come you don't need any upfront route configuration anymore? Since we assume you're using React Router 4 (why wouldn't you be!?), we can [walk your component tree](#walking-your-app-tree) and use the same logic as your router to know which routes will be called so that we can handle SSR for them.
 
@@ -29,7 +29,7 @@ TLDR; React + React Router 4 + Parcel + App.js = SSR Heaven
   - [CSS-in-JS](#css-in-js)
   - [State Management](#state-management)
   - [Apollo Graphql](#apollo-graphql)
-- [App Recipes](#app-recipes)
+- [Build Techniques](#build-recipes)
   - [Environment Variables](#environment-variables)
   - [Path Resolution](#path-resolution)
   - [Using with Typescript](#using-with-typescript)
@@ -149,7 +149,7 @@ export default () => (
 )
 ```
 
-So how does Rogue prevent itself from walking your entire App.js tree? After we find your first switch block (i.e. an exclusively rendered Page), we'll continue walking until we find five consecutive components without an `getInitialProps` method. We found this heurstic to work extremely well—there's no reason why you wouldn't have at least one `Switch` block (this isn't a SPA mate), or need to nest a servable component more than five levels apart. And the tiny performance cost of walking your component tree is well worth the simplicity it buys your application.
+So how does Rogue prevent itself from walking your entire App.js tree? After we find your first switch block (i.e. an exclusively rendered Page), we'll continue walking until we find five consecutive components without an `getInitialProps` method. We found this heuristic to work extremely well—there's no reason why you wouldn't have at least one `Switch` block (this isn't a SPA mate), or need to nest a servable component more than five levels apart. And the tiny performance cost of walking your component tree is well worth the simplicity it buys your application.
 
 ## Rogue Configuration
 
@@ -354,7 +354,7 @@ export default compose(
 )(App)
 ```
 
-## App Recipes
+## Build Techniques
 
 ### Environment Variables 
 
@@ -374,54 +374,19 @@ process.env.API_URL
 
 You can also set varaibles based on your environment, as Parcel will also load the `.env` file with the suffix of your current `NODE_ENV`. So, in production, it will load `.env.production` (make sure to add this file to your `.gitignore`!)
 
-#### Isomorphic Variables
-
-The only problem is that this is an isomorphic application and `process.env` belongs to the server. So if you'd like to use specific environment in your client side, you'll need to have Babel to replace these variables at build time.
-
-Install [babel-plugin-transform-define](https://github.com/FormidableLabs/babel-plugin-transform-define):
-
-```
-npm install --save-dev babel-plugin-transform-define
-```
-
-And add your isomorphic variables to your `.babelrc` configuration:
-
-```json
-// .babelrc
-{
-  "plugins": [
-    ["transform-define",{  
-      "process.env.API_URL": "http://localhost:4000/graphql"
-    }]
-  ]
-}
-```
-
 ### Path Resolution 
 
 It's ugly and messy to have set long, relative paths like this: `../../../my-far-away-module`.
 
-We recommend you use [babel-plugin-module-resolver](https://github.com/tleunen/babel-plugin-module-resolver) and standardize a way to resolve paths in your application.
+Parcel has built-in support for tide paths `~/` that resolve relative to your root directory. 
 
-First, install it:
+If you want a custom resolver, you can configure it inside the `alias` property in your `package.json`:
 
-```
-npm install --save-dev babel-plugin-module-resolver
-```
-
-Then, configure it in your `.babelrc`. Here's an example: 
+*note: this is coming soon (https://github.com/parcel-bundler/parcel/pull/1506)*
 
 ```json
-// .babelrc
-{
-  "plugins": [
-    ["module-resolver", {
-      "root": ["./src"],
-      "alias": { 
-        "~": "./src" 
-      }
-    }]
-  ]
+alias: {
+  "~/": "./src/app",
 }
 ```
 
@@ -439,7 +404,7 @@ Here are a few options we recommend you have:
     // resolve your modules to esnext so that dynamic imports and code splitting can work
     "target": "esnext",
     "module": "esnext",
-    // make sure you map the paths you configured with babel for autocompletion to work
+    // make sure you map the paths you configured with Parcel for autocompletion to work
     "baseUrl": "./src",
     "paths": {
       "~/*": ["*"]
