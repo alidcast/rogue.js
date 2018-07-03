@@ -35,6 +35,6 @@ switch (script) {
   }
   default:
     console.log('Unknown script "' + script + '".')
-    console.log('Perhaps you need to update renso?')
+    console.log('Perhaps you need to update rogue?')
     break
 }
