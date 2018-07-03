@@ -4,7 +4,7 @@
 
 🚧 Under construction 🚧
 
-## Project Goals / Phisolophy 
+## Project Goals / Philosophy 
 
 With Rogue, the SSR configuration will be nearly invisible to you. You don't need a special `/pages` directory (like Nextjs) or a seperate `routes.js` file (like Afterjs). All you need is the `App.js` entry point you'd usually have. This means that you can wrap your app in layouts/transitions/providers, etc. the same way you would in a regular React Application, and staying true to React's values, you can organize your code however you like. 
 
