@@ -30,7 +30,7 @@ exports.getAndVerifySrcPath = function (defaultPaths) {
   let srcPath 
   if (pkg.main) {
     srcPath = resolveFile(pkg.main)
-    if (!srcPath) throw Error(`Could not find your app in '${pgk.main}' as specified in your 'package.json'.`)
+    if (!srcPath) throw Error(`Could not find your app in ${pkg.main} as specified in your 'package.json'.`)
   } else {
     defaultPaths.forEach(path => {
       if (!srcPath) srcPath = resolveFile(path)

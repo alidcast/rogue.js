@@ -1,7 +1,7 @@
 const Bundler = require('parcel-bundler')
 const template = require('lodash/template')
 const { join, resolve } = require('path')
-const { existsSync, mkdirSync, readFileSync, ensureDir, copySync } = require('fs-extra')
+const { existsSync, mkdirSync, readFileSync, ensureDir, copy } = require('fs-extra')
 
 const {
   resolveApp,
@@ -52,9 +52,10 @@ function prepBuild () {
   ensureDir(TMP_DIR)
 
   // copy over public assets
-  copySync(resolveApp('public'), resolveApp(BUILD_PUBLIC_DIR), {
-    dereference: true,
-  })
+  const publicDir = resolveApp('public')
+  if (existsSync(publicDir)) {
+    copy(publicDir, resolveApp(BUILD_PUBLIC_DIR), { dereference: true })
+  }
 }
 
 module.exports = function bundler (env) {
