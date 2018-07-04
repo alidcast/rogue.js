@@ -57,6 +57,8 @@ and add a script to your package.json like this:
 After that, your `src/App.js` is your main entry point. All you need is to do is export a basic component to get started:
 
 ```js
+import React from "react"
+
 export default () => <div>Welcome to Rogue.js!</div>
 ```
 
