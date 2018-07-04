@@ -1,7 +1,7 @@
 const Bundler = require('parcel-bundler')
 const template = require('lodash/template')
 const { join, resolve } = require('path')
-const { existsSync, mkdirSync, readFileSync, ensureDir, copy } = require('fs-extra')
+const { existsSync, mkdirSync, readFileSync, emptyDir, copy } = require('fs-extra')
 
 const {
   resolveApp,
@@ -45,22 +45,23 @@ const getBundleOptions = env => ({
   detailedReport: isProd
 })
 
-
-function prepBuild () {
-  // create build dirs
-  ensureDir(ROGUE_DIR)
-  ensureDir(TMP_DIR)
+async function prepBuild () {
+  await emptyDir(ROGUE_DIR)
+  await emptyDir(TMP_DIR)
+  await emptyDir(BUILD_DIR)
 
   // copy over public assets
   const publicDir = resolveApp('public')
   if (existsSync(publicDir)) {
-    copy(publicDir, resolveApp(BUILD_PUBLIC_DIR), { dereference: true })
+    await copy(publicDir, resolveApp(BUILD_PUBLIC_DIR), { 
+      dereference: true,
+      overwrite: true,
+      errorOnExist: false 
+    })
   }
 }
 
-module.exports = function bundler (env) {
-  prepBuild()
-
+function createBundler (env) {
   const srcPath = getAndVerifySrcPath(['App', 'src/App'])
   const { srcDir, srcFile } = separatePathSources(srcPath)
 
@@ -76,7 +77,7 @@ module.exports = function bundler (env) {
     // otherwise the bundler outFile name doesn't seem to be used 
     if (targetPath) return fromRootToSrc(targetPath)
 
-    const templatePath = resolveOwn(`src/templates/${targetFile}.js`)
+    const templatePath = resolveOwn(`src/bundle/templates/${targetFile}.js`)
     const backupPath = resolveApp(`${TMP_DIR}/${targetFile}.js`)
     transferFile(templatePath, backupPath, processTransfer)
     return fromRootToRogue(`${targetFile}.js`)
@@ -85,6 +86,7 @@ module.exports = function bundler (env) {
   const appPath = fromRogueToSrc(srcFile)
   const appFile = readFileSync(srcPath, 'utf8')
 
+  // ensure client.js or server.js entry points
   let entryPath
   if (env === SERVER) {
     const templateVars = { 
@@ -107,4 +109,25 @@ module.exports = function bundler (env) {
   }
 
   return new Bundler(entryPath, getBundleOptions(env))
+}
+
+exports.createBundlers = async function createBundlers () {
+  await prepBuild()
+
+  const serverBundler = createBundler(SERVER)
+  const clientBundler = createBundler(CLIENT)
+
+  return { clientBundler, serverBundler }
+}
+
+exports.bundleApp = async function (clientBundler, serverBundler) {
+  try {
+    // we run the bundles one at a time to avoid compilation problems with Parcel
+    await clientBundler.bundle()
+    await serverBundler.bundle()
+    console.log('Compiled succesfully!')
+  } catch (err) {
+    if (err && err.message) console.log(err.message)
+    process.exit(1)
+  }
 }
