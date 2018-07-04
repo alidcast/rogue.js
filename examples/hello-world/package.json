@@ -1,0 +1,15 @@
+{
+  "name": "hello-world",
+  "version": "1.0.0",
+  "description": "Hello World with Roguejs",
+  "scripts": {
+    "dev": "rogue dev",
+    "build": "rogue build",
+    "start": "rogue start"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "rogue": "0.1.5"
+  }
+}
