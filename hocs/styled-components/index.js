@@ -1,7 +1,7 @@
 const { isServer } = require('../../index')
 
 const { createElement: h } = require('react')
-const { ThemeProvider } = require('style-components')
+const { ThemeProvider } = require('styled-components')
 
 
 const withStyles = (theme = {}) => App => {
@@ -12,4 +12,4 @@ const withStyles = (theme = {}) => App => {
   return RogueStyleProvider
 }
 
-module.exports = withStyles 
+module.exports = withStyles
