@@ -1,7 +1,6 @@
 {
 	"name": "rogue",
-	"version": "0.2.2",
-	"private": true,
+	"version": "0.2.4",
 	"description": "A SSR experience for React that is quick and invisible",
 	"repository": "https://github.com/alidcastano/rogue",
 	"author": "Alid Castano",
