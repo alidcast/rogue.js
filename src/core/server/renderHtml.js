@@ -1,12 +1,12 @@
-const serialize = require('serialize-javascript')
-const { APP_ID, DATA_KEY } = require('../constants')
+const serialize = require("serialize-javascript");
+const { APP_ID, DATA_KEY } = require("../constants");
 
-module.exports = function renderHtml ({
-  helmet, 
+module.exports = function renderHtml({
+  helmet,
   markup,
   data,
-  headTags, 
-  bodyTags 
+  headTags,
+  bodyTags
 }) {
   return `<!doctype html> 
   <html ${helmet.htmlAttributes.toString()}>
@@ -17,13 +17,13 @@ module.exports = function renderHtml ({
       ${helmet.title.toString()}
       ${helmet.meta.toString()}
       ${helmet.link.toString()}
-      ${(headTags || []).join('/n')}
+      ${(headTags || []).join("/n")}
     </head>
     <body ${helmet.bodyAttributes.toString()}>
       <div id="${APP_ID}">${markup}</div>
       <script src="bundle.js" defer></script>
       <script>window.${DATA_KEY} = ${serialize(data)};</script>
-      ${(bodyTags || []).join('/n')}
+      ${(bodyTags || []).join("/n")}
     </body>
-  </html>`
-}
+  </html>`;
+};

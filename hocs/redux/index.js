@@ -1,10 +1,10 @@
-const { isServer } = require('../../index')
+/* global window */
+const { createElement: h } = require("react");
+const { Provider: ReduxProvider } = require("react-redux");
+const { isServer } = require("../../index");
 
-const { createElement: h } = require('react')
-const { Provider: ReduxProvider } = require('react-redux')
-
-const STORE_CTX = 'store'
-const STORE_CACHE = '__REDUX_STORE__'
+const STORE_CTX = "store";
+const STORE_CACHE = "__REDUX_STORE__";
 
 /*
 * Redux Hoc to configure store for server side rendering.
@@ -15,28 +15,28 @@ const STORE_CACHE = '__REDUX_STORE__'
 * The 'createStore' function will be passed the store's `initialState`.
 */
 const withStore = createStore => App => {
-  function getOrCreateStore (initialState = {}) {
+  function getOrCreateStore(initialState = {}) {
     // Always make a new store if server, otherwise state is shared between requests
-    if (isServer) return createStore(initialState)
-    
+    if (isServer) return createStore(initialState);
+
     if (!window[STORE_CACHE]) {
-      window[STORE_CACHE] = createStore(initialState)
+      window[STORE_CACHE] = createStore(initialState);
     }
-    return window[STORE_CACHE]
-  }
-  
-  function RogueStoreProvider (props) {
-    const store = getOrCreateStore(props.initialReduxState || {})
-    return h(ReduxProvider, { store }, h(App, props))
+    return window[STORE_CACHE];
   }
 
-  RogueStoreProvider.getInitialProps = function (ctx) {
-    const store = getOrCreateStore()
-    ctx[STORE_CTX] = store // provide store to app ctx
-    return { initialReduxState: store.getState() }
+  function RogueStoreProvider(props) {
+    const store = getOrCreateStore(props.initialReduxState || {});
+    return h(ReduxProvider, { store }, h(App, props));
   }
 
-  return RogueStoreProvider
-}
+  RogueStoreProvider.getInitialProps = ctx => {
+    const store = getOrCreateStore();
+    ctx[STORE_CTX] = store; // provide store to app ctx
+    return { initialReduxState: store.getState() };
+  };
 
-module.exports = withStore
+  return RogueStoreProvider;
+};
+
+module.exports = withStore;

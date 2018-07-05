@@ -1,5 +1,5 @@
-const { createElement: h } = require('react')
-const { ThemeProvider } = require('styled-components')
+const { createElement: h } = require("react");
+const { ThemeProvider } = require("styled-components");
 
 /*
 * Styled Components Hoc to configure styles for server side rendering.
@@ -10,11 +10,11 @@ const { ThemeProvider } = require('styled-components')
 * Initializing the hoc is optional. But our hoc must be imported so that we know to configure SRR support.
 */
 const withStyles = (theme = {}) => App => {
-  function RogueStyleProvider (props) {
-    return h(ThemeProvider, { theme }, h(App, props))
+  function RogueStyleProvider(props) {
+    return h(ThemeProvider, { theme }, h(App, props));
   }
 
-  return RogueStyleProvider
-}
+  return RogueStyleProvider;
+};
 
-module.exports = withStyles
+module.exports = withStyles;

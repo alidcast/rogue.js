@@ -1,1 +1,1 @@
-exports.isServer = require('./src/core/utils').isServer
+exports.isServer = require("./src/core/utils").isServer;
