@@ -1,2 +1,1 @@
-exports.hydrateApp = require('./src/core/client/hydrateApp')
-
+exports.hydrateApp = require("./src/core/client/hydrateApp");

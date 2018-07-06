@@ -1,56 +1,80 @@
 {
-	"name": "rogue",
-	"version": "0.2.4",
-	"description": "A SSR experience for React that is quick and invisible",
-	"repository": "https://github.com/alidcastano/rogue",
-	"author": "Alid Castano",
-	"license": "MIT",
-	"main": "index.js",
-	"bin": {
-		"rogue": "./bin/rogue"
-	},
-	"engines": {
-		"node": ">=8.0.0",
-		"npm": ">=5.0.0"
-	},
-	"scripts": {
-		"test": "jest"
-	},
-	"peerDependencies": {
-		"react": "^16.4.1",
-		"react-dom": "^16.4.1",
-		"react-router-dom": "^4.3.1"
-	},
-	"dependencies": {
-		"babel-polyfill": "^6.26.0",
-		"connect": "^3.6.6",
-		"express": "^4.16.3",
-		"fs-extra": "^6.0.1",
-		"isomorphic-unfetch": "^2.0.0",
-		"loadable-components": "^2.2.2",
-		"lodash": "^4.17.10",
-		"parcel-bundler": "^1.9.2",
-		"react-dev-utils": "^5.0.1",
-		"react-helmet": "^5.2.0",
-		"react-router": "^4.3.1",
-		"react-tree-walker": "^4.1.0",
-		"serialize-javascript": "^1.5.0"
-	},
-	"devDependencies": {
-		"apollo-boost": "^0.1.10",
-		"babel-jest": "^23.2.0",
-		"babel-preset-env": "^1.7.0",
-		"babel-preset-react": "^6.24.1",
-		"emotion-theming": "^9.2.4",
-		"graphql": "^0.13.2",
-		"graphql-tag": "^2.9.2",
-		"jest": "^23.2.0",
-		"react": "^16.4.1",
-		"react-apollo": "^2.1.8",
-		"react-dom": "^16.4.1",
-		"react-redux": "^5.0.7",
-		"react-router-dom": "^4.3.1",
-		"react-test-renderer": "^16.4.1",
-		"redux": "^4.0.0"
-	}
+  "name": "rogue",
+  "version": "0.2.4",
+  "description": "A SSR experience for React that is quick and invisible",
+  "repository": "https://github.com/alidcastano/rogue",
+  "author": "Alid Castano",
+  "license": "MIT",
+  "main": "index.js",
+  "bin": {
+    "rogue": "bin/rogue.js"
+  },
+  "engines": {
+    "node": ">=8.0.0",
+    "npm": ">=5.0.0"
+  },
+  "scripts": {
+    "lint": "eslint --ext .jsx --ext .js .",
+    "test": "jest"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{js,jsx}": [
+      "eslint --fix",
+      "git add"
+    ]
+  },
+  "peerDependencies": {
+    "react": "^16.4.1",
+    "react-dom": "^16.4.1",
+    "react-router-dom": "^4.3.1"
+  },
+  "dependencies": {
+    "babel-polyfill": "^6.26.0",
+    "connect": "^3.6.6",
+    "emotion-theming": "^9.2.4",
+    "express": "^4.16.3",
+    "fs-extra": "^6.0.1",
+    "isomorphic-unfetch": "^2.0.0",
+    "loadable-components": "^2.2.2",
+    "lodash": "^4.17.10",
+    "parcel-bundler": "^1.9.2",
+    "react": "^16.4.1",
+    "react-apollo": "^2.1.8",
+    "react-dev-utils": "^5.0.1",
+    "react-helmet": "^5.2.0",
+    "react-redux": "^5.0.7",
+    "react-router": "^4.3.1",
+    "react-tree-walker": "^4.1.0",
+    "serialize-javascript": "^1.5.0",
+    "styled-components": "^3.3.3"
+  },
+  "devDependencies": {
+    "apollo-boost": "^0.1.10",
+    "babel-jest": "^23.2.0",
+    "babel-preset-env": "^1.7.0",
+    "babel-preset-react": "^6.24.1",
+    "eslint": "^4.19.1",
+    "eslint-config-airbnb": "^17.0.0",
+    "eslint-config-prettier": "^2.9.0",
+    "eslint-plugin-import": "^2.13.0",
+    "eslint-plugin-jest": "^21.17.0",
+    "eslint-plugin-jsx-a11y": "^6.1.0",
+    "eslint-plugin-prettier": "^2.6.1",
+    "eslint-plugin-react": "^7.10.0",
+    "graphql": "^0.13.2",
+    "graphql-tag": "^2.9.2",
+    "husky": "^1.0.0-rc.12",
+    "jest": "^23.2.0",
+    "lint-staged": "^7.2.0",
+    "prettier": "^1.13.7",
+    "react-dom": "^16.4.1",
+    "react-router-dom": "^4.3.1",
+    "react-test-renderer": "^16.4.1",
+    "redux": "^4.0.0"
+  }
 }
