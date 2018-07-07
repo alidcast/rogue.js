@@ -49,7 +49,6 @@ and add a script to your package.json:
   "scripts": {
     "dev": "rogue dev",
     "build": "rogue build",
-    "start": "rogue start"
   }
 }
 ```
