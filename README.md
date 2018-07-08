@@ -62,7 +62,9 @@ export default () => <div>Welcome to Rogue.js!</div>
 
 Then just run `npm run dev` and go to `http://localhost:3000`
 
-## Data Fetching and Middleware
+## App Concepts 
+
+### Data Fetching and Middleware
 
 Any logic you'd like to handle on initial client and server rendering can be done inside a component's `static getInitialProps` method (we kept the same property name as `Nextjs` to pay homeage to the grandaddy of React SSR frameworks).
 
@@ -91,13 +93,13 @@ Just make sure that if you do return any value from `getInitialProps`, that it i
 
 This data will then be passed to the component exported from your `App.js` file.
 
-### `getInitialProps: (ctx) => Data | void`
+#### `getInitialProps: (ctx) => Data | void`
 
 - req: (server-only) A Express.js request object
 - res: (server-only) An Express.js response object
 - redirect: A function to redirect user to another route.
 
-## Providers, Layouts, Pages, etc. 
+### Providers, Layouts, Pages, etc. 
 
 Remember that Rogue isn't asking you to configure any routes upfront. You just export a component from `App.js` component and make sure to use React Router 4 (RR4). We'll walk your component tree and use the same logic as your router to know which routes to server render.
 
@@ -105,7 +107,7 @@ So how do you handle Providers, Layouts, and Pages in your application with just
 
 Let us briefly explain how we server render your application so that you can better understand how to handle this yourself.
 
-### Walking your App tree
+#### Walking your App tree
 
 Starting from the component exported from your `App.js`, Rogue will walk your component tree looking for any components with a `static getInitialProps` method. It'll load these components in the order they are declared.
 
