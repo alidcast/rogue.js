@@ -1,4 +1,4 @@
-const { isServer } = require('../../rogue-app')
+const { isServer } = require('@roguejs/app')
 
 const { createElement: h } = require('react')
 const { Provider: ReduxProvider } = require('react-redux')

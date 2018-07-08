@@ -30,8 +30,8 @@ const getBundleOptions = env => ({
   target: env === SERVER ? 'node' : 'browser',
   outDir: env === SERVER ? BUILD_DIR : BUILD_PUBLIC_DIR,
   outFile: BUILD_FILE,
-  watch: !isProd,
-  publicUrl: env === SERVER ? './' : 'http://localhost:3001/',
+  watch: !isProd && env === SERVER, // !isProd ,
+  publicUrl: './', // env === SERVER ? './' : 'http://localhost:3001/',
   cache: !isProd,
   cacheDir: env === SERVER ? `${CACHE_DIR}/server` : `${CACHE_DIR}/client`,
   minify: isProd,
@@ -58,7 +58,8 @@ function createBundler (env) {
     // otherwise the bundler outFile name doesn't seem to be used 
     if (targetPath) return fromRootToSrc(targetPath)
 
-    const templatePath = resolveOwn(`src/bundle/templates/${targetFile}.js`)
+
+    const templatePath = resolveOwn(`cli/bundle/templates/${targetFile}.js`)
     const backupPath = resolveApp(`${TMP_DIR}/${targetFile}.js`)
     transferFile(templatePath, backupPath, processTransfer)
     return fromRootToRogue(`${targetFile}.js`)

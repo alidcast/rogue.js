@@ -2,9 +2,9 @@ process.env.BABEL_ENV = 'development'
 process.env.NODE_ENV = 'development'
 
 const http = require('http')
-const { createBundlers, bundleApp } = require('../src/bundle')
-const { requireUncached } = require('../src/bundle/utils')
-const { BUILD_PATH, BUILD_PUBLIC_DIR } = require('../src/bundle/constants')
+const { createBundlers, bundleApp } = require('../bundle')
+const { requireUncached } = require('../bundle/utils')
+const { BUILD_PATH, BUILD_PUBLIC_DIR } = require('../bundle/constants')
 
 const PORT = process.env.PORT || 3000
 
@@ -17,15 +17,7 @@ createBundlers().then(({ clientBundler, serverBundler }) => {
   const serveApp = () => {
     const app = currentApp = getApp()
 
-    app.instance.use(function (req, res, next) {
-      console.log('here...?')
-      console.log(clientBundler.pending)
-      if (clientBundler.pending) this.clientBundler.once('bundled', next)
-      else next()
-    })
-
-    app.setupMiddleware()
-    server = http.createServer(app.instance)
+    server = http.createServer(app.render)
 
     server.listen(PORT, error => {
       if (error) console.log(error)
@@ -33,53 +25,20 @@ createBundlers().then(({ clientBundler, serverBundler }) => {
   }
 
   const restartApp = () => {
-    console.log('closing this jawn')
-    server.close()
     const app = currentApp = getApp()
-
-    app.instance.use(function (req, res, next) {
-      console.log('here...?')
-      console.log(clientBundler.pending)
-      if (clientBundler.pending) this.clientBundler.once('bundled', next)
-      else next()
-    })
-    
-    app.setupMiddleware()
-    
-    console.log('opening this one....')
-    server = http.createServer(app.instance)
-    server.listen(PORT, error => {
-      if (error) console.log(error)
-    })
-
-    // server.removeListener('request', currentApp.instance)
-
-    // app.instance.use(function (req, res, next) {
-    //   console.log('pending.....?')
-    //   console.log(clientBundler.pending)
-    //   if (clientBundler.pending) this.clientBundler.once('bundled', next)
-    //   else next()
-    // })
-    // app.setupMiddleware()
-    // server.on('request', app.instance)
+    server.removeListener('request', currentApp.render)
+    server.on('request', app.render)
   }
 
   // Watch mode is disabled for client so we handle rebundling it ourselves 
   // when server bundle changes; and restart server when client bundle finishes
   serverBundler.on('bundled', async () => {
     if (currentApp !== null) {
-      console.log('bundling client...!')
-      // await clientBundler.bundle()
-      console.log('dpne wit client')
+      await clientBundler.bundle()
       restartApp()
     }
   })
-  // clientBundler.on('bundled', () => {
-  //   console.log('🔁  HMR Reloading server...')
-  //   if (currentApp !== null) restartApp()
-  // })
-  // console.log(clientBundler)
-  console.log(clientBundler.mainBundler)
+
   bundleApp(clientBundler, serverBundler).then(() => {
     console.log('Compiled succesfully! Starting App...')
     serveApp()

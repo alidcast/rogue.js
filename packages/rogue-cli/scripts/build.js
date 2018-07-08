@@ -3,7 +3,7 @@ process.env.NODE_ENV = 'production'
 
 // TODO measure file sizes, improve logging, and other improvements
 
-const { createBundlers, bundleApp } = require('../src/bundle')
+const { createBundlers, bundleApp } = require('../bundle')
 
 console.log('Creating an optimized production build...')
 

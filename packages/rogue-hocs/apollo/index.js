@@ -1,4 +1,4 @@
-const { isServer } = require('../../rogue-app')
+const { isServer } = require('@roguejs/app')
 
 const { createElement: h } = require('react')
 const { ApolloProvider, getDataFromTree } = require('react-apollo')
@@ -10,10 +10,11 @@ if (isServer) {
   global.fetch = require('isomorphic-unfetch')
 }
 
-async function initCache (App, client) {
+async function initCache (ctx, App, client) {
   try {
+    const AppWithApollo = h(ApolloProvider, { client }, h(App))
     await getDataFromTree(
-      h(ApolloProvider, { client }, App)
+      ctx.app.routable(AppWithApollo)
     )
   } catch (error) {
     // Prevent Apollo Client GraphQL errors from crashing SSR.
@@ -51,7 +52,7 @@ const withApollo = createClient => App => {
   RogueApolloProvider.getInitialProps = async function (ctx) {
     const client = createClient({}, ctx)
     ctx[APOLLO_CTX] = client // provide client to app context
-    if (isServer) await initCache(ctx.app.Component, client)
+    if (isServer) await initCache(ctx, App, client)
     return { initialApolloState: client.cache.extract() }
   }
 

@@ -10,11 +10,8 @@ module.exports = async function renderRoute({
   res, 
   App
 }) {
-  const context = {}
-  const location = req.url
-
   let RoutableApp = h(
-    props => h(StaticRouter, { context, location }, h(App, props))
+    props => h(StaticRouter, { context: {}, location: req.url }, h(App, props))
   )
 
   const ctx = getContext(RoutableApp, { req, res })

@@ -1,8 +1,7 @@
 {
 	"name": "@roguejs/hocs",
-	"version": "0.2.4",
-	"description": "A SSR experience for React that is quick and invisible",
-	"repository": "https://github.com/alidcastano/rogue",
+	"version": "0.3.3",
+	"repository": "https://github.com/alidcastano/rogue/tree/master/packages/rogue-hocs",
 	"author": "Alid Castano",
 	"license": "MIT",
 	"main": "shared.js",
@@ -10,6 +9,9 @@
 		"node": ">=8.0.0",
 		"npm": ">=5.0.0"
 	},
+	"publishConfig": {
+    "access": "public"
+  },
 	"devDependencies": {
 		"babel-jest": "^23.2.0",
 		"babel-preset-env": "^1.7.0",
