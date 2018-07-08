@@ -10,7 +10,7 @@ With Rogue, the SSR configuration will be nearly invisible to you. You don't nee
 
 How come you don't need any upfront route configuration anymore? Since we assume you're using React Router 4 (why wouldn't you be!?), we can [walk your component tree](#walking-your-app-tree) and use the same logic as your router to know which routes will be called so that we can handle SSR for them.
 
-As an added benefit, because Rogue is a newer framework, we can use Parcel as our application bundler. One of the top complaints of existing SSR frameworks is slow build times, but they'll tell you it's not their fault, they rely on Webpack. Well, we don't! So not only to we avoid maintaining a complex build setup (Parcel is zero configuration too!), but you'll get faster build times and a better developer experience.
+As an added benefit, because Rogue is a newer framework, we can use Parcel as our application bundler. One of the top complaints of existing SSR frameworks is slow build times, but they'll tell you it's not their fault, they rely on Webpack. Well, we don't! Not only do we avoid maintaining a complex build setup (Parcel is zero configuration too!), but you'll get faster build times and a better developer experience.
 
 TLDR; React + React Router 4 + Parcel + App.js = SSR Heaven
 
@@ -42,7 +42,7 @@ Install it:
 npm install --save rogue react react-dom react-router-dom
 ```
 
-and add a script to your package.json like this:
+and add a script to your package.json:
 
 ```json
 {
@@ -57,10 +57,12 @@ and add a script to your package.json like this:
 After that, your `src/App.js` is your main entry point. All you need is to do is export a basic component to get started:
 
 ```js
+import React from "react"
+
 export default () => <div>Welcome to Rogue.js!</div>
 ```
 
-Then just run `npm run dev` and go to `http://localhost:3000`
+Then run `npm run dev` and go to `http://localhost:3000`
 
 ## App Concepts 
 
@@ -89,7 +91,7 @@ export default class Route extends React.Component {
 }
 ```
 
-Just make sure that if you do return any value from `getInitialProps`, that it is a plain `Object`, as it will be serialized when server rendering.
+Make sure that if you do return any value from `getInitialProps`, that it is a plain `Object`, as it will be serialized when server rendering.
 
 This data will then be passed to the component exported from your `App.js` file.
 
@@ -101,9 +103,9 @@ This data will then be passed to the component exported from your `App.js` file.
 
 ### Providers, Layouts, Pages, etc. 
 
-Remember that Rogue isn't asking you to configure any routes upfront. You just export a component from `App.js` component and make sure to use React Router 4 (RR4). We'll walk your component tree and use the same logic as your router to know which routes to server render.
+Remember that Rogue isn't asking you to configure any routes upfront. You export a component from `App.js` component and make sure to use React Router 4 (RR4). We'll walk your component tree and use the same logic as your router to know which routes to server render.
 
-So how do you handle Providers, Layouts, and Pages in your application with just an `App.js` file? That's the wonderful simplicity of Rogue: you're just using React, React Router 4,  and some optional `getInitialProps` magic.
+How do you handle Providers, Layouts, and Pages in your application with just an `App.js` file? That's the wonderful simplicity of Rogue: you're just using React, React Router 4,  and some optional `getInitialProps` magic.
 
 Let us briefly explain how we server render your application so that you can better understand how to handle this yourself.
 
@@ -151,7 +153,7 @@ export default () => (
 )
 ```
 
-So how does Rogue prevent itself from walking your entire App.js tree? After we find your first switch block (i.e. an exclusively rendered Page), we'll continue walking until we find five consecutive components without an `getInitialProps` method. We found this heuristic to work extremely well—there's no reason why you wouldn't have at least one `Switch` block (this isn't a SPA mate), or need to nest a servable component more than five levels apart. And the tiny performance cost of walking your component tree is well worth the simplicity it buys your application.
+How does Rogue prevent itself from walking your entire App.js tree? After we find your first switch block (i.e. an exclusively rendered Page), we'll continue walking until we find five consecutive components without an `getInitialProps` method. We found this heuristic to work extremely well—there's no reason why you wouldn't have at least one `Switch` block (this isn't a SPA mate), or need to nest a servable component more than five levels apart. And the tiny performance cost of walking your component tree is well worth the simplicity it buys your application.
 
 ## Rogue Configuration
 

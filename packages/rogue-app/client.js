@@ -1,2 +1,2 @@
-module.exports = require('./lib/client/hydrateApp')
+module.exports = require('./client/hydrateApp')
 
