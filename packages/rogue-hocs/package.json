@@ -1,6 +1,6 @@
 {
 	"name": "@roguejs/hocs",
-	"version": "0.3.3",
+	"version": "0.3.4",
 	"repository": "https://github.com/alidcastano/rogue/tree/master/packages/rogue-hocs",
 	"author": "Alid Castano",
 	"license": "MIT",
@@ -10,8 +10,8 @@
 		"npm": ">=5.0.0"
 	},
 	"publishConfig": {
-    "access": "public"
-  },
+		"access": "public"
+	},
 	"devDependencies": {
 		"babel-jest": "^23.2.0",
 		"babel-preset-env": "^1.7.0",
@@ -29,5 +29,8 @@
 		"react-redux": "^5.0.7",
 		"react-router-dom": "^4.3.1",
 		"redux": "^4.0.0"
+	},
+	"dependencies": {
+		"lerna": "2.10.1"
 	}
 }

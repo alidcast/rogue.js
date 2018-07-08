@@ -1,7 +1,5 @@
 # Rogue
 
-> SSR for React that's invisible (zero configuration!) and quick (no Webpack!)
-
 🚧 Under construction 🚧
 
 ## Project Goals / Philosophy 

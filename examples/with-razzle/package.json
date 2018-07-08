@@ -1,0 +1,14 @@
+{
+  "name": "rogue-with-razzle",
+  "version": "1.0.0",
+  "description": "Rogue with Razzle Example",
+  "scripts": {
+    "dev": "razzle start",
+    "build": "razzle build",
+    "start": "NODE_ENV=production node build/server.js"
+  },
+  "dependencies": {
+    "@roguejs/app": "^0.3.5",
+    "razzle": "^2.2.0"
+  }
+}

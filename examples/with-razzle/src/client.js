@@ -1,4 +1,4 @@
 import hydrateApp from '@roguejs/app/client'
-import App from '<%= appPath %>'
+import App from './App'
 
 hydrateApp(App)
