@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@roguejs/app": "^0.3.5",
+    "babel-polyfill": "^6.26.0",
     "razzle": "^2.2.0"
   }
 }

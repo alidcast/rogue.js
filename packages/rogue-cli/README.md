@@ -1,6 +1,6 @@
 # roguejs/cli (WIP)
 
-A cli system for running Rogue with a neary invisible configuration. 
+A cli system for running Rogue with a neary invisible configuration.
 
 Powered by Parcel for blazingly fast rebuild times.
 
@@ -14,13 +14,13 @@ Powered by Parcel for blazingly fast rebuild times.
   - [Path Resolution](#path-resolution)
   - [Using with Typescript](#using-with-typescript)
 
-## Getting Started 
+## Getting Started
 
 Install necessary dependencies:
 
 ```bash
 // rogue
-npm install --save @roguejs/app @rougejs/cli 
+npm install --save @roguejs/app @roguejs/cli
 // peer dependencies
 npm install --save react react-dom react-router-dom
 ```
@@ -64,11 +64,11 @@ If you'd like to configure the entry point, just do what you'd normally do, chan
 
 ## Build Techniques
 
-### Environment Variables 
+### Environment Variables
 
 You'll often have to use secrets, or environment variables, in your application. This is done inside `.env` files, which Parcel has built-in support for.
 
-For example, this configuration: 
+For example, this configuration:
 ```
 // .env
 API_URL='http://localhost:4000/graphql'
@@ -77,16 +77,16 @@ API_URL='http://localhost:4000/graphql'
 Can be accessed as:
 
 ```
-process.env.API_URL 
+process.env.API_URL
 ```
 
 You can also set varaibles based on your environment, as Parcel will also load the `.env` file with the suffix of your current `NODE_ENV`. So, in production, it will load `.env.production` (make sure to add this file to your `.gitignore`!)
 
-### Path Resolution 
+### Path Resolution
 
 It's ugly and messy to have set long, relative paths like this: `../../../my-far-away-module`.
 
-Parcel has built-in support for tide paths `~/` that resolve relative to your root directory. 
+Parcel has built-in support for tide paths `~/` that resolve relative to your root directory.
 
 If you want a custom resolver, you can configure it inside the `alias` property in your `package.json`:
 
