@@ -14,11 +14,10 @@ function getSsrData () {
 
 module.exports = function hydrateApp (App) {
   const props = getSsrData()
-  return 
-  // loadComponents().then(() => // TODO
-    hydrate(
-      h(BrowserRouter, {}, h(App, props)), 
-      document.getElementById(APP_ID)
-    )   
+  // return loadComponents().then(() => // TODO
+  return hydrate(
+    h(BrowserRouter, {}, h(App, props)), 
+    document.getElementById(APP_ID)
+  )   
   // )
 }
