@@ -2,13 +2,13 @@
 
 With Rogue, the SSR configuration will be nearly invisible to you. You don't need a special `/pages` directory (like Nextjs) or a separate `routes.js` file (like Afterjs). Only the `App.js` entry point you'd usually have. This means that you can wrap your app in layouts/transitions/providers, etc. the same way you would in a regular React Application, and staying true to React's values, you can organize your code however you like. 
 
-In case the beautiful simplicity of that isn't enough to get your attention, Rogue also comes with first-class support for: Graphl (Apollo), State Mangagement (Redux), and Css-in-Js (Emotion / Styled-Components).
+As an added benefit, Rogue also comes with first-class support for: Graghql (Apollo), State Mangagement (Redux), and Css-in-Js (Emotion / Styled-Components).
 
 There are three Rogue packages: 
 
 - [`@roguejs/app`](https://github.com/alidcastano/rogue.js/tree/master/packages/rogue-app), holds the core modules for the Rogue framework. You can use this package to streamline your SSR experience independent of any build setup.
 - [`@roguejs/hocs`](https://github.com/alidcastano/rogue.js/tree/master/packages/rogue-hocs), holds
-higher order components that come preconfigured with SSR support Rogue. You can use this package to enhance your application without uncessary SSR boilerplate.
+higher order components that come preconfigured with SSR support for Rogue. You can use this package to enhance your application without uncessary SSR boilerplate.
 - [`@roguejs/cli`](https://github.com/alidcastano/rogue.js/tree/master/packages/rogue-cli) (WIP), holds the build and development system for the Roguejs framework. You can use this package to power a Roguejs app with zero configuration.
 
 *Note: If you'd like to get started with Rogue now, we recommend you use `@roguejs/app` with your own custom build setup. Check out the [with-razzle](https://github.com/alidcastano/rogue.js/tree/master/examples/with-razzle) directory for an example of how to setup Rogue.*
