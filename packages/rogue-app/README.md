@@ -119,6 +119,11 @@ This data will then be passed to the component exported from your `App.js` file.
   - `markupRenderers`: An array of functions for further processing html markup
 - `redirect`: A function to redirect user to another route
 - `isServer`: A boolean to indicate whether current environment is server
+- `path`: A string that equals the path of the current route, e.g. `"/foo/bar"`.
+- `params`: (route only) An object that contains key/value pairs of dynamic route segments. For example, dynamic route path `"foo/:user"` can be accessed as `params.user`. If there are no params the value will be an empty object.
+- `query`: An object that contains key/value pairs of the query string. For example, for a path `/foo?user=1`, we get `$route.query.user == 1`. If there is no query the value will be an empty object.
+- `hash`: The hash of the current route (with the `#`), if it has one. If no hash is present the value will be an empty string.
+- `fullPath`: The full resolved URL including query and hash.
 
 ### Providers, Layouts, Pages, etc. 
 

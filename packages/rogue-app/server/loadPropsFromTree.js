@@ -2,6 +2,7 @@ const React = require('react')
 const walkTree = require('react-tree-walker')
 const { matchPath } = require('react-router-dom')
 const { parse: parseUrl } = require('url')
+const { includeMatchData } = require('./context')
 
 const isSimpleElement = el => !el.type 
 
@@ -16,7 +17,7 @@ const getRouteProps = el => {
 }
 
 // https://github.com/ReactTraining/react-router/blob/master/packages/react-router/modules/Switch.js
-const getRouteFromSwitch = (switchInstance, url) => {
+const getRouteDataFromSwitch = (switchInstance, url) => {
   const currentRoute = switchInstance.context.router.route 
   const routes = switchInstance.props.children
   
@@ -25,13 +26,13 @@ const getRouteFromSwitch = (switchInstance, url) => {
     if (match || !React.isValidElement(routeElement)) return
     match = matchPath(
       parseUrl(url).pathname, 
-      getRouteProps(routeElement), 
+      getRouteProps(routeElement),
       currentRoute
     )
     if (!match) return
     component = (routeElement.props || {}).component
   })
-  return component
+  return { component, match }
 } 
 
 module.exports = async function getPropsFromTree (App, ctx) {
@@ -39,8 +40,9 @@ module.exports = async function getPropsFromTree (App, ctx) {
   const parentWhitelist = ['StaticRouter', 'Router', App.name, 'Route']
 
   let props = {}
-  async function loadProps (component) {
+  async function loadProps (component, match = {}) {
     if (!component || !component.getInitialProps) return
+    includeMatchData(ctx, match)
     const compProps = await component.getInitialProps(ctx)
     if (compProps) props = Object.assign({}, props, compProps)
   }
@@ -72,8 +74,8 @@ module.exports = async function getPropsFromTree (App, ctx) {
     const servableComponent = isServable(element) && element.type
 
     if (switchInstance) {
-      const component = getRouteFromSwitch(switchInstance, ctx.req.url)
-      if (component) await loadProps(component)
+      const { component, match } = getRouteDataFromSwitch(switchInstance, ctx.req.url)
+      if (component) await loadProps(component, match)
       seenRoutes.push(component) // add even empty vales since we still use non-matched routes for counting
       stepsSinceLastServed = 0
     } else if (servableComponent && !hasAlreadySeen(servableComponent)) {

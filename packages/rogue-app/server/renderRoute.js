@@ -3,7 +3,7 @@ const { renderToString } = require('react-dom/server')
 const { StaticRouter } = require('react-router-dom')
 const { getLoadableState } = require('loadable-components/server')
 const loadPropsFromTree = require('./loadPropsFromTree')
-const getContext = require('./getContext')
+const { getContext } = require('./context')
 
 module.exports = async function renderRoute({ 
   req, 
@@ -23,7 +23,7 @@ module.exports = async function renderRoute({
   bodyTags.push(loadableState.getScriptTag())
 
   const data = await loadPropsFromTree(RoutableApp, ctx)
-
+  
   RoutableApp = hc(RoutableApp, data)
   
   const rawMarkup = renderToString(RoutableApp)
