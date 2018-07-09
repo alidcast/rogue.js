@@ -9,6 +9,7 @@
 - [App Enhancements](#app-enhancements)
   - [Document Tags](#document-tags)
   - [Code Splitting](#code-splitting)
+- [Custom Enhancements](#custom-enhancements)
 
 ## App Setup
 
@@ -108,9 +109,15 @@ This data will then be passed to the component exported from your `App.js` file.
 
 #### `getInitialProps: (ctx) => Data | void`
 
-- req: (server-only) A Express.js request object
-- res: (server-only) An Express.js response object
-- redirect: A function to redirect user to another route.
+- `req`: (server-only) A nodejs Request object
+- `res`: (server-only) A nodejs Response object
+- `app`: (server-only) An object, with properties to configure SSR
+  - `routable`: A function accpets a Component and returns it wrapped in router environment
+  - `headTags`: An array of head tags to include in html document,
+  - `bodyTags`: An array of body tags to include in html document,
+  - `markupRenderers`: An array of functions for further processing html markup
+- `redirect`: A function to redirect user to another route
+- `isServer`: A boolean to indicate whether current environment is server
 
 ### Providers, Layouts, Pages, etc. 
 
@@ -226,4 +233,35 @@ export default () => (
     <Route path="/welcome" component={Landing} />
   </Switch>
 )
+```
+
+## Custom Enhancements
+
+With Rogue, you can configure SSR support for any React Provider by using the [`ctx.app`](#getinitialprops-ctx--data--void) object passed to `getInitialProps`.
+
+As an example, here's how we configure SSR for or [`emotion` hoc](https://github.com/alidcastano/rogue.js/tree/master/packages/rogue-hocs/emotion):
+
+```js
+RogueEmotionProvider.getInitialProps = (ctx) => {
+  if (ctx.isServer) {
+    ctx.app.markupRenderers.push( // add renderer function to include styles in html markup 
+      markup => require('emotion-server').renderStylesToString(markup)
+    )
+  }
+}
+```
+
+And here's how we do it for our [`styled-components` hoc](https://github.com/alidcastano/rogue.js/tree/master/packages/rogue-hocs/styled-components):
+
+```js
+RogueStyledProvider.getInitialProps = (ctx) => {
+  if (ctx.isServer) {
+    const { ServerStyleSheet } = require('styled-components')
+    const sheet = new ServerStyleSheet()
+    sheet.collectStyles(ctx.app.Component)
+    ctx.app.headTags.push( // add style tags to head
+      sheet.getStyleTags()
+    )
+  }
+}
 ```

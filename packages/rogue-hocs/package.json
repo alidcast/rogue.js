@@ -1,6 +1,6 @@
 {
 	"name": "@roguejs/hocs",
-	"version": "0.3.4",
+	"version": "0.4.0",
 	"repository": "https://github.com/alidcastano/rogue/tree/master/packages/rogue-hocs",
 	"author": "Alid Castano",
 	"license": "MIT",
