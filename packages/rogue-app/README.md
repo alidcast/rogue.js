@@ -10,6 +10,7 @@
   - [Document Tags](#document-tags)
   - [Code Splitting](#code-splitting)
 - [Custom Enhancements](#custom-enhancements)
+- [Custom Server](#custom-server)
 
 ## App Setup
 
@@ -27,7 +28,7 @@ In your `server.js` initialize your Rogue app:
 import Rogue from '@roguejs/app/server'
 import { Helmet } from 'react-helmet'
 import serveStatic from 'serve-static'
-import App from './app/App'
+import App from './App'
 
 const rogue = new Rogue({
   Helmet,
@@ -264,4 +265,24 @@ RogueStyledProvider.getInitialProps = (ctx) => {
     )
   }
 }
+```
+
+## Custom Server
+
+You can use Rogue with your own custom server. Simply pass [`rouge.render`](https://github.com/alidcastano/rogue.js/tree/master/packages/rogue-app#rogue-api) to your app's middleware:
+
+```js
+import Rogue from '@roguejs/app/server'
+import express from 'express'
+import App from './app/App'
+
+const rogue = new Rogue({...})
+
+const app = express()
+
+app.use(app.static(process.env.PUBLIC_DIR))
+
+app.use(rouge.render)
+
+export default app
 ```
