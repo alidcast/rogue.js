@@ -1,9 +1,28 @@
-# roguejs/cli
+# roguejs/cli (WIP)
 
-Install it:
+A cli system for running Rogue with a neary invisible configuration. 
+
+Powered by Parcel for blazingly fast rebuild times.
+
+🚧 Under Construction 🚧
+
+**Table of Contents**
+- [Getting Started](#getting-started)
+- [Rogue Configuration](#rogue-configuration)
+- [Build Techniques](#build-recipes)
+  - [Environment Variables](#environment-variables)
+  - [Path Resolution](#path-resolution)
+  - [Using with Typescript](#using-with-typescript)
+
+## Getting Started 
+
+Install necessary dependencies:
 
 ```bash
-npm install --save rogue react react-dom react-router-dom
+// rogue
+npm install --save @roguejs/app @rougejs/cli 
+// peer dependencies
+npm install --save react react-dom react-router-dom
 ```
 
 and add a script to your package.json:
@@ -26,6 +45,8 @@ import React from "react"
 export default () => <div>Welcome to Rogue.js!</div>
 ```
 
+Then run `npm run dev` and go to `http://localhost:3000`
+
 ## Rogue Configuration
 
 We want to remain as invisible as possible—so there's no special `rogue.config.js` file. The idea is that once you know the entry point of an application, the rest can be inferred from the code.
@@ -40,7 +61,6 @@ If you'd like to configure the entry point, just do what you'd normally do, chan
   "main": "app/src/App"
 }
 ```
-
 
 ## Build Techniques
 

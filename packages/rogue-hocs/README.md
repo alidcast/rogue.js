@@ -1,5 +1,16 @@
 # @roguejs/hocs
 
+Below are optional app customizations that we have SSR support for.
+
+All you have to do is import and initialize the desired hoc in your `App.js` file.
+
+*Note: Make sure to read the respective packages documentation for usage information.*
+
+**Table of Contents**
+- [CSS-in-JS](#css-in-js)
+- [State Management](#state-management)
+- [Apollo Graphql](#apollo-graphql)
+
 ## CSS-in-JS
 
 Rogue has first class support for [emotion](https://emotion.sh) and [styled-components](https://styled-components.com).
@@ -27,10 +38,7 @@ const App = () => (...)
 export default withStyles(theme)(App)
 ```
 
-*In this case, our `StyleProvider` just wraps each respective packages `ThemeProvider`. Initializing it with your theme is optional but you must still import the appropriate `hoc` as that's how you tell us to configure SSR support for it.*
-
 That's it; now you have SSR support for your styles, so style away!
-
 
 ## State management
 

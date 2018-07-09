@@ -1,6 +1,79 @@
 # roguejs/app
 
-Then run `npm run dev` and go to `http://localhost:3000`
+- [App Setup](#app-setup)
+- [App Concepts](#app-concepts)
+  - [Data Fetching and Middleware](#packages/rogue-app#data-fetching-and-middleware)
+    - [`getInitialProps`](#getinitialprops-ctx--data--void)
+  - [Providers, Layouts, Pages, etc.](#providers-layouts-pages-etc)
+    - [Walking your App tree](#walking-your-app-tree)
+- [App Enhancements](#app-enhancements)
+  - [Document Tags](#document-tags)
+  - [Code Splitting](#code-splitting)
+
+## App Setup
+
+Rogue comes with a lightweight middleware framework that you can use to streamline your SSR setup.
+
+First, install the package: 
+
+```
+npm install @roguejs/app
+```
+
+In your `server.js` initialize your Rogue app: 
+
+```js
+import Rogue from '@roguejs/app/server'
+import { Helmet } from 'react-helmet'
+import serveStatic from 'serve-static'
+import App from './app/App'
+
+const rogue = new Rogue({
+  Helmet,
+  App
+})
+
+rogue.preuse(serveStatic(process.env.PUBLIC_DIR))
+
+export default rogue
+```
+
+In your `client.js` hyrate your Rogue app:
+
+```js
+import hydrate from '@roguejs/app/client'
+import App from './App'
+
+hydrate(App)
+```
+
+And finally, start your app: 
+
+```js
+import http from 'http'
+import rogue from './server'
+
+const server = http.createServer(rogue.render)
+
+server.listen(3000)
+```
+
+For an example of setting up Rogue with your own build system, check out the [with-razzle](https://github.com/alidcastano/rogue.js/tree/master/examples/with-razzle) example.
+
+## `rogue` API
+
+* `rogue(args: Object)`
+
+Accepts the following arguments:
+* `Helmet`: (required) A `react-helmet` component.
+* `App`: (required) Your app's root component.
+* `bundleUrl`: The location where your bundle will be served from. Defaults to `./bundle.js`.
+
+Has the following methods:
+
+* `preuse(fn)`: `Function` to add a middleware before the render middleware.
+* `use(fn)`: `Function` to add a middleware after the render middleware.
+* `render(req, res)`: `Function` to run the rogue middleware stack against Node's `req` and `res` objects.
 
 ## App Concepts 
 
@@ -41,7 +114,7 @@ This data will then be passed to the component exported from your `App.js` file.
 
 ### Providers, Layouts, Pages, etc. 
 
-Remember that Rogue isn't asking you to configure any routes upfront. You export a component from `App.js` component and make sure to use React Router 4 (RR4). We'll walk your component tree and use the same logic as your router to know which routes to server render.
+Remember that Rogue doesn't ask you to configure any routes upfront. You only need an `App.js` component and make sure to use React Router 4 (RR4). We'll walk your component tree and use the same logic as your router to know which routes to server render.
 
 How do you handle Providers, Layouts, and Pages in your application with just an `App.js` file? That's the wonderful simplicity of Rogue: you're just using React, React Router 4,  and some optional `getInitialProps` magic.
 
@@ -93,13 +166,13 @@ export default () => (
 
 How does Rogue prevent itself from walking your entire App.js tree? After we find your first switch block (i.e. an exclusively rendered Page), we'll continue walking until we find five consecutive components without an `getInitialProps` method. We found this heuristic to work extremely well—there's no reason why you wouldn't have at least one `Switch` block (this isn't a SPA mate), or need to nest a servable component more than five levels apart. And the tiny performance cost of walking your component tree is well worth the simplicity it buys your application.
 
-## App Customization
+## App Enhancements
 
-Below are some app customizations that we have SSR support for. 
+Rogue makes it easy to enhance your app with functionality.
 
-For some customizations, if the community already preferred a certain solution or if support for other options just wouldn't have worked (e.g. because it required Webpack), then we made support for them automatic. 
+For some enhancements, if the community already preferred a certain solution or if support for other options just wouldn't have worked (e.g. because it required Webpack), then we made support for them automatic and included them below.
 
-However, for customizations such as state management and CSS-in-JS, where the community is divided on which solution to use, then we made support optional via higher-order components, or hocs. All these hocs are found in our `rogue/hocs` directory. All you have to do is import and initialize them in your `App.js` file.
+However, for customizations such as state management and CSS-in-JS, where the community is divided on which solution to use, then we made support optional via higher-order components, or hocs. You can find more information about these hocs in our [`@roguejs/hocs`](https://github.com/alidcastano/rogue.js/tree/master/packages/rogue-hocs). 
 
 *Note: Make sure to read the respective packages documentation for usage information.*
 
@@ -154,84 +227,3 @@ export default () => (
   </Switch>
 )
 ```
-
-## Setup
-
-Rogue comes with a lightweight middleware framework that you can use to streamline your SSR setup.
-
-First, install the package: 
-
-```
-npm install @roguejs/app
-```
-
-In your `server.js` initialize your Rogue app: 
-
-```js
-import Rogue from '@roguejs/app/server'
-import { Helmet } from 'react-helmet'
-import serveStatic from 'serve-static'
-import App from './app/App'
-
-const rogue = new Rogue({
-  Helmet,
-  App
-})
-
-rogue.preuse(serveStatic(process.env.PUBLIC_DIR))
-
-export default rogue
-```
-
-In your `client.js` hyrate your Rogue app:
-
-```js
-import hydrate from '@roguejs/app/client'
-import App from './App'
-
-hydrate(App)
-```
-
-And finally, start your app: 
-
-```js
-import http from 'http'
-import rogue from './server'
-
-const server = http.createServer(rogue.render)
-
-server.listen(3000)
-```
-
-For an example of setting up Rogue with your own build system, check out the [with-razzle](https://github.com/alidcastano/rogue.js/tree/master/examples/with-razzle) example.
-
-You can also use Rogue in your own custom server:
-
-```js
-import Rogue from '@roguejs/app/server'
-import express from 'express'
-
-const app = express()
-const rogue = new Rogue({...})
-
-// Give rogue middleware to express
-app.use(rogue.render)
-
-export default app
-```
-
-
-## `rogue` API
-
-* `rogue(args: Object)`
-
-Accepts the following arguments:
-* `Helmet`: (required) A `react-helmet` component.
-* `App`: (required) Your app's root component.
-* `bundleUrl`: The location where your bundle will be served from. Defaults to `./bundle.js`.
-
-Has the following methods:
-
-* `preuse(fn)`: `Function` to add a middleware before the render middleware.
-* `use(fn)`: `Function` to add a middleware after the render middleware.
-* `render(req, res)`: `Function` to run the rogue middleware stack against Node's `req` and `res` objects.
