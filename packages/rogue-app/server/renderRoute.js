@@ -3,7 +3,7 @@ const { renderToString } = require('react-dom/server')
 const { StaticRouter } = require('react-router-dom')
 const { getLoadableState } = require('loadable-components/server')
 const loadPropsFromTree = require('./loadPropsFromTree')
-const getContext = require('./getContext')
+const { getContext } = require('./context')
 
 module.exports = async function renderRoute({ 
   req, 
@@ -16,26 +16,23 @@ module.exports = async function renderRoute({
 
   const ctx = getContext(RoutableApp, { req, res })
 
-  const { headTags, bodyTags, markupRenderers } = ctx.app
-
   // Resolve anync components first so that we can check for their initial props
   const loadableState = await getLoadableState(RoutableApp)
-  bodyTags.push(loadableState.getScriptTag())
+  ctx.app.bodyTags.push(loadableState.getScriptTag())
 
   const data = await loadPropsFromTree(RoutableApp, ctx)
-
   RoutableApp = hc(RoutableApp, data)
   
+  const { headTags, bodyTags, markupRenderers } = ctx.app
+
   const rawMarkup = renderToString(RoutableApp)
   const markup = reduceFns(markupRenderers, rawMarkup)
 
   return { markup, data, headTags, bodyTags }
 }
 
-function reduceFns (fns, baseValue, extraArgs) {
+function reduceFns (fns, baseValue) {
   let currValue = baseValue 
-  fns.forEach(async (fn) => {
-    currValue = await fn(currValue, extraArgs)
-  })
+  fns.forEach((fn) => { currValue = fn(currValue) })
   return currValue
 }

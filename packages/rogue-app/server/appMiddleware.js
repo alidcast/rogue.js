@@ -10,9 +10,7 @@ module.exports = function appMiddleware ({
 }) {
   return async function handler (req, res) {
     try {
-      const { markup, data, headTags, bodyTags } = await renderRoute({ req, res, App })
-      
-      if (res.finished) return // redirected
+      const  { markup, data, headTags, bodyTags } = await renderRoute({ req, res, App })
       
       const helmet = Helmet.renderStatic()
 

@@ -1,26 +1,45 @@
 const { StaticRouter } = require('react-router-dom')
 const { createElement: h } = require('react')
-
+const url = require('url')
 const { isServer } = require('../shared/utils')
 
-module.exports = function getContext (App, serverCtx = {}) {
+exports.getContext = function (App, serverCtx = {}) {
   const redirect = initRedirect(serverCtx)
   const routable = initRoutable(serverCtx)
 
   if (isServer) {
-    const ctx = Object.assign({}, serverCtx, { isServer, redirect })
+    const { path: fullPath, pathname: path, query } = url.parse(serverCtx.req.url, true)
+
+    const ctx = Object.assign({}, serverCtx, { 
+      isServer, 
+      redirect,
+      fullPath,
+      path, 
+      query,
+      // Dynamicaly set using `mergeMatchData` (see below)
+      params: {}
+    })
+    
+    // Properties for configuring SSR support via `getInitialProps`
     ctx.app = {
       routable,
       headTags: [],
       bodyTags: [],
       markupRenderers: []
     }
+  
     return ctx 
-  } else {
+  } else { // TODO
     return { isServer, redirect }
   }
 }
 
+// Some route information is unknown until we walk component tree, 
+// so we'll export this helper to make sure we dynamically set it 
+// consistently as we walk component tree
+exports.includeMatchData = function (ctx, match) {
+  ctx.params = match.params || {}
+}
 
 function initRoutable (ctx) {
   const context = {}

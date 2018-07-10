@@ -2,7 +2,7 @@
 	"private": true,
 	"repository": "https://github.com/alidcastano/rogue",
 	"bugs": "https://github.com/alidcastano/rogue/issues",
-  "homepage": "https://github.com/alidcastano/rogue#readme",
+	"homepage": "https://github.com/alidcastano/rogue#readme",
 	"author": "Alid Castano",
 	"scripts": {
 		"test": "jest"

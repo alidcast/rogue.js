@@ -1,5 +1,5 @@
 const { createElement: h } = require('react')
-const { ThemeProvider } = require('styled-components')
+const { ThemeProvider, ServerStyleSheet } = require('styled-components')
 
 /*
 * Styled Components Hoc to configure styles for server side rendering.
@@ -14,7 +14,6 @@ const withStyles = (theme = {}) => App => {
 
   RogueStyledProvider.getInitialProps = (ctx) => {
     if (ctx.isServer) {
-      const { ServerStyleSheet } = require('styled-components')
       const sheet = new ServerStyleSheet()
       sheet.collectStyles(ctx.app.Component)
       ctx.app.headTags.push(sheet.getStyleTags())
