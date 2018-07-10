@@ -42,7 +42,7 @@ Read the docs on [walking your `App.js` tree](https://github.com/alidcastano/rog
 
 #### Will Rogue support static pages like `Gatsbyjs` or `Nextjs`?
 
-Rouge was created to make complex apps simpler. We leverage RR4 so that we can infer from your code what routes to dynamically SSR without any configuration. However, if you only need static pages, then Nextjs and Gatsby are great solutions, and having a `/pages` directory might even fit your use-case better.
+Rogue was created to make complex apps simpler. We leverage RR4 so that we can infer from your code what routes to dynamically SSR without any configuration. However, if you only need static pages, then Nextjs and Gatsby are great solutions, and having a `/pages` directory might even fit your use-case better.
 
 ## Author
 
