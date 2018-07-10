@@ -1,8 +1,8 @@
 # Rogue
 
-With Rogue, the SSR configuration will be nearly invisible to you. You don't need a special `/pages` directory (like Nextjs) or a separate `routes.js` file (like Afterjs). Only the `App.js` entry point you'd usually have. This means that you can wrap your app in layouts/transitions/providers, etc. the same way you would in a regular React Application, and staying true to React's values, you can organize your code however you like. 
+With Rogue, the SSR configuration will be nearly invisible to you. You don't need a special `/pages` directory (like Nextjs) or a separate `routes.js` file (like Afterjs). Only the `App.js` entry point you'd usually have. This means that you can wrap your app in layouts/transitions/providers, etc. the same way you would in a regular React Application, and staying true to React's values, you can organize your code however you like.
 
-As an added benefit, Rogue also comes with first-class support for: Graghql (Apollo), State Mangagement (Redux), and Css-in-Js (Emotion / Styled-Components).
+As an added benefit, Rogue also comes with first-class support for: GraphQL (Apollo), State Management (Redux), and Css-in-Js (Emotion / Styled-Components).
 
 🚧 Under Construction 🚧
 
@@ -48,7 +48,7 @@ Rouge was created to make complex apps simpler. We leverage RR4 so that we can i
 
 - Alid Castano ([@alidcastano](https://twitter.com/alidcastano))
 
-## Inspiration 
+## Inspiration
 
 - [Nextjs](https://github.com/zeit/next.js/)
 - [Razzle](https://github.com/jaredpalmer/razzle)+[Afterjs](https://github.com/jaredpalmer/after.js)
