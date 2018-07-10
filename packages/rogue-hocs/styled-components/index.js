@@ -12,13 +12,18 @@ const withStyles = (theme = {}) => App => {
     return h(ThemeProvider, { theme }, h(App, props))
   }
 
-  RogueStyledProvider.getInitialProps = (ctx) => {
-    if (ctx.isServer) {
-      const sheet = new ServerStyleSheet()
-      sheet.collectStyles(ctx.app.Component)
-      ctx.app.headTags.push(sheet.getStyleTags())
-    }
+  RogueStyledProvider.getInitialProps = async function (ctx) {
+    const sheet = new ServerStyleSheet()
+    sheet.collectStyles(ctx.app.Component)
+    ctx.app.headTags.push(sheet.getStyleTags())
+    
+    let props = {}
+    if (App.getInitialProps) props = await App.getInitialProps(ctx) || {}
+    return props
   }
+
+  RogueStyledProvider.displayName = `withStyles(${App.displayName || App.name})`
+  RogueStyledProvider.WrappedComponent = App
 
   return RogueStyledProvider
 }

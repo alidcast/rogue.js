@@ -12,13 +12,19 @@ const withStyles = (theme = {}) => App => {
     return h(ThemeProvider, { theme }, h(App, props))
   }
 
-  RogueEmotionProvider.getInitialProps = (ctx) => {
-    if (ctx.isServer) {
-      ctx.app.markupRenderers.push(
-        markup => require('emotion-server').renderStylesToString(markup)
-      )
-    }
+  RogueEmotionProvider.getInitialProps = async function (ctx) {
+    ctx.app.markupRenderers.push(
+      markup => require('emotion-server').renderStylesToString(markup)
+    )
+
+    let props = {}
+    if (App.getInitialProps) props = await App.getInitialProps(ctx) || {}
+    return props
   }
+
+  
+  RogueEmotionProvider.displayName = `withStyles(${App.displayName || App.name})`
+  RogueEmotionProvider.WrappedComponent = App
 
   return RogueEmotionProvider
 }

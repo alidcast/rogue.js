@@ -37,11 +37,10 @@ const withApollo = createClient => App => {
   function getOrCreateClient (initialState = {}, ctx = {}) {
     // Always make new client in server, otherwise state is share between requests
     if (isServer) return createClient(initialState, ctx)
-
-    if (!apolloClient) {
-      apolloClient = createClient(initialState, ctx)
+    else {
+      if (!apolloClient) apolloClient = createClient(initialState, ctx)
+      return apolloClient
     }
-    return apolloClient
   }
 
   function RogueApolloProvider (props) {
@@ -52,9 +51,17 @@ const withApollo = createClient => App => {
   RogueApolloProvider.getInitialProps = async function (ctx) {
     const client = createClient({}, ctx)
     ctx[APOLLO_CTX] = client // provide client to app context
-    if (isServer) await initCache(ctx, App, client)
-    return { initialApolloState: client.cache.extract() }
+
+    let props = {}
+    if (App.getInitialProps) props = await App.getInitialProps(ctx) || {}
+    await initCache(ctx, App, client)
+    props.initialApolloState = client.cache.extract()
+
+    return props
   }
+
+  RogueApolloProvider.displayName = `withApollo(${App.displayName || App.name})`
+  RogueApolloProvider.WrappedComponent = App
 
   return RogueApolloProvider
 }

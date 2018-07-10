@@ -5,9 +5,9 @@ const { getLoadableState } = require('loadable-components/server')
 const loadPropsFromTree = require('./loadPropsFromTree')
 const { getContext } = require('./context')
 
-module.exports = async function renderRoute(RoutableApp, routerContext, { req, res }) {
+module.exports = async function renderRoute(App, routerContext, { req, res }) {
   let RoutableApp = h(
-    props => h(StaticRouter, { context: routerContext, location: req.url }, h(RoutableApp, props))
+    props => h(StaticRouter, { context: routerContext, location: req.url }, h(App, props))
   )
 
   const ctx = getContext(RoutableApp, { req, res })

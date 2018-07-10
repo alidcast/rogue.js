@@ -3,89 +3,70 @@ const { StaticRouter, Switch, Route } = require('react-router-dom')
 const loadPropsFromTree = require('../loadPropsFromTree')
 const { join } = require('path')
 
-const basePath = '/'
-const nestedPath1 = '/nested1'
-const nestedPath2 = '/nested2'
-
 let fakeInitialProps = jest.fn()
 
-const Provider = (props) => <div>{props.children}</div>
-Provider.getInitialProps = fakeInitialProps
+const StoreProvider = (props) => <div>{props.children}</div>
+const StyleProvider = (props) => <div>{props.children}</div>
+
+const App = (props) => <div>{props.children}</div>
+App.getInitialProps = fakeInitialProps
 
 const Page = (props) => <div>{props.children}</div>
-Page.getInitialProps = fakeInitialProps
+Page.getInitialProps = fakeInitialProps // shouldn't never called 
 
-const LayoutPage = (props) => (
-  <div>
-    <Switch>
-      <Route exact path={nestedPath1} component={Page} />
-      <Route exact path={nestedPath2} component={Page} />
-    </Switch>
-    {props.children}
-  </div>
-)
-
-LayoutPage.getInitialProps = fakeInitialProps
-
-const AppWithLayout = () => (
-  <Switch>
-    <Route exact path={basePath} component={LayoutPage} /> 
-  </Switch> 
-)
-
-const Routable = (props) => (
-  <StaticRouter context={{}} location={basePath}>
-    {props.children}
-  </StaticRouter>
-)
-
-const fakeReq = (url) => ({ req: { url } })
+const hoc = Wrapper => Component => {
+  const Wrapper = (props) => <Component {...props} />
+  Wrapper.getInitialProps = async function (ctx) {
+    if (Component.getInitialProps) await Component.getInitialProps(ctx)
+    return fakeInitialProps(ctx)
+  }
+  return Wrapper
+}
 
 beforeEach(() => {
   fakeInitialProps.mockReset()
 })
 
-test('It loads matched page', async () => {
-  await loadPropsFromTree(
-    <Routable>
-      <Switch>
-        <Route exact path={basePath} component={Page} /> 
-      </Switch> 
-    </Routable>, 
-    fakeReq(basePath)
-  )
+test('It loads app', async () => {
+  await loadPropsFromTree(<App />)
   expect(fakeInitialProps.mock.calls.length).toBe(1)
 })
 
-test('It loads matched layout and page', async () => {
-  await loadPropsFromTree(
-    <Routable>
-      <AppWithLayout>
-      </AppWithLayout>
-    </Routable>, 
-    fakeReq(nestedPath1)
-  )
+test('It loads app with one provider', async () => {
+  const EnhancedApp = hoc(StoreProvider)(App)
+  await loadPropsFromTree(<EnhancedApp />)
   expect(fakeInitialProps.mock.calls.length).toBe(2)
 })
 
-test('It loads matched layout but not unmatched page', async () => {
+test('It loads app with multiple providers', async () => {
+  const EnhancedApp = hoc(StoreProvider)(hoc(StyleProvider)(App))
+  await loadPropsFromTree(<EnhancedApp />)
+  expect(fakeInitialProps.mock.calls.length).toBe(3)
+})
+
+test('Does not walk/load past switch statement', async () => {
   await loadPropsFromTree(
-    <Routable>
-      <AppWithLayout />
-    </Routable>, 
-    fakeReq(join(basePath, '/random'))
+    <StaticRouter context={{}} location="/">
+      <App>
+        <Switch>
+          <Route path="/" component={Page} />
+        </Switch>
+      </App>
+    </StaticRouter>
   )
   expect(fakeInitialProps.mock.calls.length).toBe(1)
 })
 
-test('It loads provider, page, and layout', async () => {
+
+test('Loads up to switch statement', async () => {
   await loadPropsFromTree(
-    <Routable>
-      <Provider>
-        <AppWithLayout />
-      </Provider>
-    </Routable>, 
-    fakeReq(nestedPath1)
+    <StaticRouter context={{}} location="/">
+      <App>
+        <Switch>
+          <Route path="/" component={Page} />
+        </Switch>
+      </App>
+    </StaticRouter>
   )
-  expect(fakeInitialProps.mock.calls.length).toBe(3)
+  expect(fakeInitialProps.mock.calls.length).toBe(1)
 })

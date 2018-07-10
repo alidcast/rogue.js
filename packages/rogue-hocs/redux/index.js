@@ -18,11 +18,10 @@ const withStore = createStore => App => {
   function getOrCreateStore (initialState = {}) {
     // Always make a new store if server, otherwise state is shared between requests
     if (isServer) return createStore(initialState)
-    
-    if (!reduxStore) {
-      reduxStore = createStore(initialState)
-    }
-    return reduxStore
+    else {
+      if (!reduxStore) reduxStore = createStore(initialState)
+      return reduxStore
+    } 
   }
   
   function RogueStoreProvider (props) {
@@ -30,11 +29,19 @@ const withStore = createStore => App => {
     return h(ReduxProvider, { store }, h(App, props))
   }
 
-  RogueStoreProvider.getInitialProps = function (ctx) {
+  RogueStoreProvider.getInitialProps = async function (ctx) {
     const store = getOrCreateStore()
     ctx[STORE_CTX] = store // provide store to app ctx
-    return { initialReduxState: store.getState() }
+
+    let props = {}
+    if (App.getInitialProps) props = await App.getInitialProps(ctx) || {}
+    props.initialReduxState = store.getState()
+
+    return props
   }
+
+  RogueStoreProvider.displayName = `withStore(${App.displayName || App.name})`
+  RogueStoreProvider.WrappedComponent = App
 
   return RogueStoreProvider
 }
