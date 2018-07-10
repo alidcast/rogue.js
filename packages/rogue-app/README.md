@@ -40,7 +40,7 @@ rogue.preuse(serveStatic(process.env.PUBLIC_DIR))
 export default rogue
 ```
 
-In your `client.js` hyrate your Rogue app:
+In your `client.js` hydrate your Rogue app:
 
 ```js
 import hydrate from '@roguejs/app/client'
