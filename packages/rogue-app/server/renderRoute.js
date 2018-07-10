@@ -1,17 +1,13 @@
 const { createElement: h, cloneElement: hc } = require('react')
-const { renderToString } = require('react-dom/server')
 const { StaticRouter } = require('react-router-dom')
+const { renderToString } = require('react-dom/server')
 const { getLoadableState } = require('loadable-components/server')
 const loadPropsFromTree = require('./loadPropsFromTree')
 const { getContext } = require('./context')
 
-module.exports = async function renderRoute({ 
-  req, 
-  res, 
-  App
-}) {
+module.exports = async function renderRoute(RoutableApp, routerContext, { req, res }) {
   let RoutableApp = h(
-    props => h(StaticRouter, { context: {}, location: req.url }, h(App, props))
+    props => h(StaticRouter, { context: routerContext, location: req.url }, h(RoutableApp, props))
   )
 
   const ctx = getContext(RoutableApp, { req, res })
