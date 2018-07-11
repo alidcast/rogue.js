@@ -2,10 +2,8 @@
 
 - [App Setup](#app-setup)
 - [App Concepts](#app-concepts)
-  - [Data Fetching and Middleware](#packages/rogue-app#data-fetching-and-middleware)
+  - [Server-rendering logic](#packages/rogue-app#server-rendering-logic)
     - [`getInitialProps`](#getinitialprops-ctx--data--void)
-  - [Providers, Layouts, Pages, etc.](#providers-layouts-pages-etc)
-    - [Walking your App tree](#walking-your-app-tree)
 - [App Enhancements](#app-enhancements)
   - [Document Tags](#document-tags)
   - [Code Splitting](#code-splitting)
@@ -30,10 +28,7 @@ import { Helmet } from 'react-helmet'
 import serveStatic from 'serve-static'
 import App from './App'
 
-const rogue = new Rogue({
-  Helmet,
-  App
-})
+const rogue = new Rogue(App)
 
 rogue.preuse(serveStatic(process.env.PUBLIC_DIR))
 
@@ -64,11 +59,9 @@ For an example of setting up Rogue with your own build system, check out the [wi
 
 ## `rogue` API
 
-* `rogue(args: Object)`
+* `rogue(App: React.Component, options: Object)`
 
-Accepts the following arguments:
-* `Helmet`: (required) A `react-helmet` component.
-* `App`: (required) Your app's root component.
+Accepts the following options:
 * `bundleUrl`: The location where your bundle will be served from. Defaults to `./bundle.js`.
 
 Has the following methods:
@@ -79,32 +72,34 @@ Has the following methods:
 
 ## App Concepts 
 
-### Data Fetching and Middleware
+### Server-rendering logic
 
-Any logic you'd like to handle on initial client and server rendering can be done inside a component's `static getInitialProps` method (we kept the same property name as `Nextjs` to pay homeage to the grandaddy of React SSR frameworks).
+Any logic you'd like to handle upon server rendering can be done inside a component's `static getInitialProps` method (we kept the same property name as `Nextjs` to pay homeage to the grandaddy of React SSR frameworks).
 
-You can use this property to prefetch data:
+It's important to note that Rogue only calls `getInitialProps` inside your `App.js` component (and not inside `pages` like Nextjs).
+
+The reason for that is that Rogue assumes you're using Apollo Graphql and React Router 4. So that elimates the two primary use-cases for `getInitialProps` inside pages: querying data and handling redirects.
+
+However, `getInitialProps` is still useful for bootstrapping your application with server specific. For example, here's how you might handle refreshing an authenticated user:
 
 ```js
+// note: this example uses the Apollo and Redux Hocs
 export default class App extends React.Component {
   static async getInitialProps({ req, res }) {
-    const data = await callMyApi()
-    return data
+    const token = getToken(ctx.req)
+    if (!ctx.store.getState().session.user) { // refresh session
+      try {
+        const res = await ctx.apollo.query({ query: authUserQuery })
+        ctx.store.dispatch(setSession({ user: res.data.authUser }))
+      } catch (err) { // invalid or expired token 
+        ctx.store.dispatch(removeSession())
+      }
+    }
   }
 }
 ```
 
-Or to handle route middleware: 
-
-```js
-export default class Route extends React.Component {
-  static getInitialProps({ req, res, redirect }) {
-    if (req.url === '/not-allowed') redirect('/')
-  }
-}
-```
-
-Make sure that if you do return any value from `getInitialProps`, that it is a plain `Object`, as it will be serialized when server rendering.
+If you return any value from `getInitialProps`, make sure that it is a plain `Object`, as it will be serialized when server rendering.
 
 This data will then be passed to the component exported from your `App.js` file.
 
@@ -124,60 +119,6 @@ This data will then be passed to the component exported from your `App.js` file.
 - `query`: An object that contains key/value pairs of the query string. For example, for a path `/foo?user=1`, we get `$route.query.user == 1`. If there is no query the value will be an empty object.
 - `hash`: The hash of the current route (with the `#`), if it has one. If no hash is present the value will be an empty string.
 - `fullPath`: The full resolved URL including query and hash.
-
-### Providers, Layouts, Pages, etc. 
-
-Remember that Rogue doesn't ask you to configure any routes upfront. You only need an `App.js` component and make sure to use React Router 4 (RR4). We'll walk your component tree and use the same logic as your router to know which routes to server render.
-
-How do you handle Providers, Layouts, and Pages in your application with just an `App.js` file? That's the wonderful simplicity of Rogue: you're just using React, React Router 4,  and some optional `getInitialProps` magic.
-
-Let us briefly explain how we server render your application so that you can better understand how to handle this yourself.
-
-#### Walking your App tree
-
-Starting from the component exported from your `App.js`, Rogue will walk your component tree looking for any components with a `static getInitialProps` method. It'll load these components in the order they are declared.
-
-Most applications are usually organized in this order: 
-
-```
-Providers (e.g. ApolloProvider, StyleProvider) -> Layouts (e.g. AppLayout, AuthLayout) -> Pages (e.g. Dashboard, Login, Register)
-```
-
-`Providers` are regular components with an optional `getInitialProps` method. For examples of this check out [App Customization](#app-customization) section or the code found inside the `rogue/hocs` directory.
-
-`Layouts` and `Pages` on the other hand, are more properly thought of as "routes," that also can optionally have a `getInitialProps` method. For Rogue, the only difference between the two is that one comes before the other. 
-
-This is the important part to remember: since you can only server render routes exclusively (e.g. you match `/route1` or `/route2`, not both), Rogue expects you to configure your Layouts and Pages in that manner. The way you do that is with a RR4's [Switch component](https://reacttraining.com/react-router/web/api/Switch).
-
-Here's an example:
-
-```js
-// App.js
-import { Switch, Route } from 'react-router-dom'
-
-export default () => (
-  <Provider>
-    <Switch>
-      // Route with only a Page
-      <Route exact path="/welcome" component={WelcomePage} />
-      // Routes with a  Layout and a Page, via render props 
-      <Route exact path="/register" render={props => <AuthLayout><Register {...props}></AuthLayout>} />
-      <Route exact path="/login" render={props => <AuthLayout><Login {...props}></AuthLayout>} />
-      // Route with a Layout and a Page, via a nested switch statement
-      <Route path="/" render={props => {
-        <AppLayout>
-          <Switch>
-            <Route exact path="/dashboard" component={Dashboard} />
-            <Route exact path="/profile" component={Profile} />
-          </Switch>
-        </AppLayout>} 
-      }/>
-    </Switch>
-  </Provider>
-)
-```
-
-How does Rogue prevent itself from walking your entire App.js tree? After we find your first switch block (i.e. an exclusively rendered Page), we'll continue walking until we find five consecutive components without an `getInitialProps` method. We found this heuristic to work extremely well—there's no reason why you wouldn't have at least one `Switch` block (this isn't a SPA mate), or need to nest a servable component more than five levels apart. And the tiny performance cost of walking your component tree is well worth the simplicity it buys your application.
 
 ## App Enhancements
 
@@ -249,11 +190,13 @@ As an example, here's how we configure SSR for or [`emotion` hoc](https://github
 
 ```js
 RogueEmotionProvider.getInitialProps = (ctx) => {
-  if (ctx.isServer) {
-    ctx.app.markupRenderers.push( // add renderer function to include styles in html markup 
-      markup => require('emotion-server').renderStylesToString(markup)
-    )
-  }
+  ctx.app.markupRenderers.push(
+    markup => require('emotion-server').renderStylesToString(markup)
+  )
+
+  let props = {}
+  if (App.getInitialProps) props = await App.getInitialProps(ctx) || {}
+  return props
 }
 ```
 
@@ -261,14 +204,13 @@ And here's how we do it for our [`styled-components` hoc](https://github.com/ali
 
 ```js
 RogueStyledProvider.getInitialProps = (ctx) => {
-  if (ctx.isServer) {
-    const { ServerStyleSheet } = require('styled-components')
-    const sheet = new ServerStyleSheet()
-    sheet.collectStyles(ctx.app.Component)
-    ctx.app.headTags.push( // add style tags to head
-      sheet.getStyleTags()
-    )
-  }
+  const sheet = new ServerStyleSheet()
+  sheet.collectStyles(ctx.app.Component)
+  ctx.app.headTags.push(sheet.getStyleTags())
+  
+  let props = {}
+  if (App.getInitialProps) props = await App.getInitialProps(ctx) || {}
+  return props
 }
 ```
 
@@ -281,7 +223,7 @@ import Rogue from '@roguejs/app/server'
 import express from 'express'
 import App from './app/App'
 
-const rogue = new Rogue({...})
+const rogue = new Rogue(App)
 
 const app = express()
 
