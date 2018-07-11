@@ -1,15 +1,10 @@
-const renderRoute = require('./renderRoute')
-const toHtml = require('./toHtml')
+import { Helmet } from 'react-helmet'
+import renderRoute from './renderRoute'
+import toHtml from './toHtml'
 
-module.exports = function appMiddleware ({ 
-  // We access Helmet as a param passed from server.js instead of requiring it
-  // because it must be used with es6 imports in order to work
-  Helmet,
-  App, 
-  bundleUrl
-}) {
+export default function appMiddleware (App: React.ComponentType<any>, bundleUrl: string) {
   return async function handler (req, res) {
-    const routerContext = {}
+    const routerContext = { url: null }
     const serverContext = { req, res }
   
     try {

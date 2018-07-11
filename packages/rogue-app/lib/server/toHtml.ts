@@ -1,7 +1,7 @@
-const serialize = require('serialize-javascript')
-const { APP_ID, DATA_KEY } = require('../shared/constants')
+import serialize from 'serialize-javascript'
+import { APP_ID, DATA_KEY } from '../shared/constants'
 
-module.exports = function toHtml ({
+export default function toHtml ({
   helmet, 
   markup,
   data,

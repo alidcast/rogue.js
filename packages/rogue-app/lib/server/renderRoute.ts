@@ -1,22 +1,22 @@
-const { createElement: h, cloneElement: hc } = require('react')
-const { StaticRouter } = require('react-router-dom')
-const { renderToString } = require('react-dom/server')
-const { getLoadableState } = require('loadable-components/server')
-const loadPropsFromTree = require('./loadPropsFromTree')
-const { getContext } = require('./context')
+import { createElement as h, cloneElement as hc } from 'react'
+import { StaticRouter } from 'react-router-dom'
+import { renderToString } from 'react-dom/server'
+import { getLoadableState } from 'loadable-components/server'
+import loadProps from './loadProps'
+import { getContext } from './context'
 
-module.exports = async function renderRoute(App, routerContext, { req, res }) {
+export default async function renderRoute (App, routerContext, { req, res }) {
   let RoutableApp = h(
     props => h(StaticRouter, { context: routerContext, location: req.url }, h(App, props))
   )
 
-  const ctx = getContext(RoutableApp, { req, res })
+  const ctx = getContext({ req, res }) as any
 
   // Resolve anync components first so that we can check for their initial props
   const loadableState = await getLoadableState(RoutableApp)
   ctx.app.bodyTags.push(loadableState.getScriptTag())
 
-  const data = await loadPropsFromTree(RoutableApp, ctx)
+  const data = await loadProps(RoutableApp, ctx)
   RoutableApp = hc(RoutableApp, data)
   
   const { headTags, bodyTags, markupRenderers } = ctx.app

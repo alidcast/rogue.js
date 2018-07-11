@@ -1,1 +1,0 @@
-exports.isServer = require('./shared/utils').isServer
