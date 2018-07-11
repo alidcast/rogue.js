@@ -30,10 +30,7 @@ import { Helmet } from 'react-helmet'
 import serveStatic from 'serve-static'
 import App from './App'
 
-const rogue = new Rogue({
-  Helmet,
-  App
-})
+const rogue = new Rogue(App)
 
 rogue.preuse(serveStatic(process.env.PUBLIC_DIR))
 
@@ -64,11 +61,9 @@ For an example of setting up Rogue with your own build system, check out the [wi
 
 ## `rogue` API
 
-* `rogue(args: Object)`
+* `rogue(App: React.Component, options: Object)`
 
-Accepts the following arguments:
-* `Helmet`: (required) A `react-helmet` component.
-* `App`: (required) Your app's root component.
+Accepts the following options:
 * `bundleUrl`: The location where your bundle will be served from. Defaults to `./bundle.js`.
 
 Has the following methods:
