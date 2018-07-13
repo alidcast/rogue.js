@@ -6,9 +6,8 @@ import loadProps from './loadProps'
 import { getContext } from './context'
 
 export default async function renderRoute (App, routerContext, { req, res }) {
-  let RoutableApp = h(
-    props => h(StaticRouter, { context: routerContext, location: req.url }, h(App, props))
-  )
+  // do not pass routerContext here since don't want any logic to persist as we walk tree to get initial props
+  let RoutableApp = h(StaticRouter, { context: {}, location: req.url }, h(App))
 
   const ctx = getContext({ req, res }) as any
 
@@ -17,7 +16,9 @@ export default async function renderRoute (App, routerContext, { req, res }) {
   ctx.app.bodyTags.push(loadableState.getScriptTag())
 
   const data = await loadProps(RoutableApp, ctx)
-  RoutableApp = hc(RoutableApp, data)
+
+  // make a fresh element and pass it routerContext since render logic (i.e. redirects) should now persist
+  RoutableApp = h(StaticRouter, { context: routerContext, location: req.url }, h(App, data))
   
   const { headTags, bodyTags, markupRenderers } = ctx.app
 
