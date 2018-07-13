@@ -1,6 +1,6 @@
 {
 	"name": "@roguejs/app",
-	"version": "0.6.3",
+	"version": "0.6.8",
 	"description": "A SSR experience for React that is quick and invisible",
 	"repository": "https://github.com/alidcastano/rogue/blob/master/packages/rogue-app",
 	"author": "Alid Castano",
@@ -15,6 +15,7 @@
 		"access": "public"
 	},
 	"scripts": {
+		"bump": "npm run build && npm version patch && npm publish",
 		"build": "rollup -c"
 	},
 	"engines": {
