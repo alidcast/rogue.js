@@ -1,19 +1,24 @@
 import React, { createElement as h } from 'react'
-import { hydrate } from 'react-dom'
+import ReactDOM from 'react-dom'
 import { BrowserRouter } from 'react-router-dom'
 import { loadComponents } from 'loadable-components'
 import { APP_ID, DATA_KEY } from '../shared/constants'
 
-function getSsrData () {
-  return typeof window !== undefined ? window[DATA_KEY] : {}
-}
+export default function hydrate (App: React.ComponentType<any>) {
+  const data = getSsrData()
+  
+  // only hydrate if server rendered (prevents client-server mistach in development)
+  const mount = !data ? ReactDOM.hydrate : ReactDOM.render
 
-export default function hydrateApp (App: React.ComponentType<any>) {
-  const props = getSsrData()
   return loadComponents().then(() => (
-    hydrate(
-      h(BrowserRouter, {}, h(App, props)), 
+    mount(
+      h(BrowserRouter, {}, h(App, data)), 
       document.getElementById(APP_ID)
     )   
   ))
+}
+
+
+function getSsrData () {
+  return typeof window !== undefined ? window[DATA_KEY] : null
 }
