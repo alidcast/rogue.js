@@ -1,4 +1,4 @@
-import hydrateApp from '@roguejs/app/client'
+import { hydrate } from '@roguejs/app'
 import App from './App'
 
-hydrateApp(App)
+hydrate(App)

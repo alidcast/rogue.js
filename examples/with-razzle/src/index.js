@@ -18,9 +18,9 @@ if (module.hot) {
 
   module.hot.accept('./server', () => {
     console.log('🔁  HMR Reloading `./server`...')
-    server.removeListener('request', currentApp)
+    server.removeListener('request', currentApp.render)
     const newApp = require('./server').default
-    server.on('request', newApp)
+    server.on('request', newApp.render)
     currentApp = newApp
   })
 }

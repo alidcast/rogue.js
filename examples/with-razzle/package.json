@@ -8,8 +8,12 @@
     "start": "NODE_ENV=production node build/server.js"
   },
   "dependencies": {
-    "@roguejs/app": "^0.3.5",
+    "@roguejs/app": "0.6.9",
     "babel-polyfill": "^6.26.0",
-    "razzle": "^2.2.0"
+    "razzle": "^2.2.0",
+    "react": "^16.4.1",
+    "react-dom": "^16.4.1",
+    "react-router": "^4.3.1",
+    "react-router-dom": "^4.3.1"
   }
 }
