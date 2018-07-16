@@ -25,10 +25,6 @@ const app = new Rogue(App)
 app.listen(3000)
 ```
 
-🚧 Under Construction 🚧
-
-*If you'd like to get started with Rogue now, we recommend you use [`@roguejs/app`](https://github.com/alidcastano/rogue.js/tree/master/packages/rogue-app) (see below) with your own custom build setup. Check out the [with-razzle](https://github.com/alidcastano/rogue.js/tree/master/examples/with-razzle) directory for an example of how to setup Rogue.*
-
 There are three Rogue packages: 
 
 - [`@roguejs/app`](https://github.com/alidcastano/rogue.js/tree/master/packages/rogue-app), holds the core modules for the Rogue framework. You can use this package to streamline your SSR experience independent of any build setup.
@@ -36,7 +32,13 @@ There are three Rogue packages:
 higher order components that come preconfigured with SSR support for Rogue. You can use this package to enhance your application without uncessary SSR boilerplate.
 - [`@roguejs/cli`](https://github.com/alidcastano/rogue.js/tree/master/packages/rogue-cli) (WIP), holds the build and development system for the Roguejs framework. You can use this package to power a Roguejs app with zero configuration.
 
+*If you'd like to get started with Rogue now, we recommend you use [`@roguejs/app`](https://github.com/alidcastano/rogue.js/tree/master/packages/rogue-app) with your own custom build setup. Check out the [with-razzle](https://github.com/alidcastano/rogue.js/tree/master/examples/with-razzle) example to get started.*
+
 Each of the above packages holds its respective documentation inside its `README.md`.
+
+### Who is Rogue for? 
+
+Rogue was built to make complex web apps simpler. We're able to do this by assuming that you're already using (or plan to use) two great techologies: React Router 4 and Apollo Graphql. If your application doesn't satisfy these needs, we recommend you check out [Nextjs](https://github.com/zeit/next.js/) as an alternative.
 
 ### Index
 
