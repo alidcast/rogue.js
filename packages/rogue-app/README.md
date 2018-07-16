@@ -69,6 +69,7 @@ Has the following methods:
 * `preuse(fn)`: `Function` to add a middleware before the render middleware.
 * `use(fn)`: `Function` to add a middleware after the render middleware.
 * `render(req, res)`: `Function` to run the rogue middleware stack against Node's `req` and `res` objects.
+* `listen(port, callback)`: `Function` to start the app listening for requests. Alias to Nodejs [`server.listen`](https://nodejs.org/dist/latest-v6.x/docs/api/http.html#http_server_listen_port_hostname_backlog_callback).
 
 ## App Concepts 
 

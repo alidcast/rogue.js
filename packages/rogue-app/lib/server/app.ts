@@ -42,6 +42,13 @@ export default class App {
     else this.postMiddlewares.push(routeOrHandler as Function)
   }
 
+  /**
+   * Start app listening for requests.
+   */
+  listen (port: number, ...args) {
+    return this.app.listen(port, ...args)
+  }
+
   private initMiddleware () {
     const { app } = this
     const useMiddleware = m => Array.isArray(m) ? app.use(m[0]/*path*/, m[1]/*handler*/) : app.use(m)

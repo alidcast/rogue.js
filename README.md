@@ -18,12 +18,11 @@ hydrate(App)
 
 // server.js
 import Rogue from '@roguejs/app/server'
-import http from 'http'
 import App from './App'
 
 const app = new Rogue(App)
 
-http.createServer(app.render).listen(3000)
+app.listen(3000)
 ```
 
 🚧 Under Construction 🚧

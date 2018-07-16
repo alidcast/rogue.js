@@ -56,17 +56,3 @@ test('Does not walk/load past switch statement', async () => {
   )
   expect(fakeInitialProps.mock.calls.length).toBe(1)
 })
-
-
-test('Loads up to switch statement', async () => {
-  await loadPropsFromTree(
-    <StaticRouter context={{}} location="/">
-      <App>
-        <Switch>
-          <Route path="/" component={Page} />
-        </Switch>
-      </App>
-    </StaticRouter>
-  )
-  expect(fakeInitialProps.mock.calls.length).toBe(1)
-})
