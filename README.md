@@ -38,7 +38,7 @@ Each of the above packages holds its respective documentation inside its `README
 
 ### Who is Rogue for? 
 
-Rogue was built to make complex web apps simpler. We're able to do this by assuming that you're already using (or plan to use) two great techologies: React Router 4 and Apollo Graphql. If your application doesn't satisfy these needs, we recommend you check out [Nextjs](https://github.com/zeit/next.js/) as an alternative.
+Rogue was built to make complex web apps simpler. We're able to do this by assuming that you're already using (or plan to use) two great techologies: React Router 4 and Apollo Graphql. If your application doesn't satisfy these needs, we recommend you to check out [Nextjs](https://github.com/zeit/next.js/) as an alternative.
 
 ### Index
 
