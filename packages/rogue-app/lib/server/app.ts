@@ -11,7 +11,7 @@ export default class App {
   postMiddlewares: Middlewares
   initialized: boolean 
 
-  constructor (App: React.ComponentType<any>, { bundleUrl }) {
+  constructor (App: React.ComponentType<any>, { bundleUrl } = { bundleUrl: 'bundle.js' }) {
     this.app = connect() 
     this.preMiddlewares = []
     this.postMiddlewares = [appMiddleware(App, bundleUrl)]
