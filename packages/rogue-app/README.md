@@ -75,7 +75,7 @@ Has the following methods:
 
 ### Server-rendering logic
 
-Any logic you'd like to handle upon server rendering can be done inside a component's `static getInitialProps` method (we kept the same property name as `Nextjs` to pay homeage to the grandaddy of React SSR frameworks).
+Any logic you'd like to handle upon server rendering can be done inside a component's `static getInitialProps` method (we kept the same property name as `Nextjs` to pay homage to the grandaddy of React SSR frameworks).
 
 It's important to note that Rogue only calls `getInitialProps` inside your `App.js` component (and not inside `pages` like Nextjs).
 
