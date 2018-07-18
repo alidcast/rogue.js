@@ -217,7 +217,7 @@ RogueStyledProvider.getInitialProps = (ctx) => {
 
 ## Custom Server
 
-You can use Rogue with your own custom server. Simply pass [`rouge.render`](https://github.com/alidcastano/rogue.js/tree/master/packages/rogue-app#rogue-api) to your app's middleware:
+You can use Rogue with your own custom server. Simply pass [`rogue.render`](https://github.com/alidcastano/rogue.js/tree/master/packages/rogue-app#rogue-api) to your app's middleware:
 
 ```js
 import Rogue from '@roguejs/app/server'
@@ -230,7 +230,7 @@ const app = express()
 
 app.use(app.static(process.env.PUBLIC_DIR))
 
-app.use(rouge.render)
+app.use(rogue.render)
 
 export default app
 ```
