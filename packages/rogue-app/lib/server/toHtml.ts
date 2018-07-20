@@ -22,7 +22,7 @@ export default function toHtml ({
     </head>
     <body ${helmet.bodyAttributes.toString()}>
       <div id="${APP_ID}">${markup}</div>
-      <script src="${bundleUrl || 'bundle.js'}" defer></script>
+      <script src="${bundleUrl}" defer></script>
       <script>window.${DATA_KEY} = ${serialize(data)};</script>
       ${(bodyTags || []).join('/n')}
     </body>

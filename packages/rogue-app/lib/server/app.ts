@@ -5,13 +5,17 @@ import appMiddleware from './appMiddleware'
 type MiddlewareArgs = Function/*handler*/ | [string/*route*/, Function/*handler*/]
 type Middlewares = Array<MiddlewareArgs>
 
+const defaults = {
+  bundleUrl: 'bundle.js'
+}
+
 export default class App {
   app: any 
   preMiddlewares: Middlewares
   postMiddlewares: Middlewares
   initialized: boolean 
 
-  constructor (App: React.ComponentType<any>, { bundleUrl }) {
+  constructor (App: React.ComponentType<any>, { bundleUrl } = defaults) {
     this.app = connect() 
     this.preMiddlewares = []
     this.postMiddlewares = [appMiddleware(App, bundleUrl)]
