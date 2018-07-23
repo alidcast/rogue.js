@@ -2,7 +2,9 @@
 
 With Rogue, the server rendering configuration will be nearly invisible to you. You don't need a special `/pages` directory (like Nextjs) or a separate `routes.js` file (like Afterjs). All you need is the `App.js` entry point you'd usually have. This means that you can wrap your app in layouts/transitions/providers, etc. the same way you would in a regular React Application, and staying true to React's values, you can organize your code however you like.
 
-As an added benefit, Rogue also comes with first-class support for: GraphQL (Apollo), State Management (Redux), and Css-in-Js (Emotion / Styled-Components).
+We're able to simplify the server-rendering setup for your app, by assuming that you're using (or plan to use) two great technologies: [React Router](https://github.com/ReactTraining/react-router/) (for dynamic routing) and [Apollo Graphql](https://github.com/apollographql/apollo-client) (for querying data).
+
+As an added benefit, Rogue also comes with first-class support for: State Management (Redux) and Css-in-Js (Emotion / Styled-Components).
 
 But anyway, -- these are just words; and we know the way to your heart is with code, so here's an example of how your server-rendered apps will look going forward:
 
@@ -35,10 +37,6 @@ higher order components that come preconfigured with SSR support for Rogue. You 
 *If you'd like to get started with Rogue now, we recommend you use [`@roguejs/app`](https://github.com/alidcastano/rogue.js/tree/master/packages/rogue-app) with your own custom build setup. Check out the [with-razzle](https://github.com/alidcastano/rogue.js/tree/master/examples/with-razzle) example to get started.*
 
 Each of the above packages holds its respective documentation inside its `README.md`.
-
-### Who is Rogue for? 
-
-Rogue was built to make complex web apps simpler. We're able to do this by assuming that you're already using (or plan to use) two great techologies: React Router 4 and Apollo Graphql. If your application doesn't satisfy these needs, we recommend you to check out [Nextjs](https://github.com/zeit/next.js/) as an alternative.
 
 ### Index
 
