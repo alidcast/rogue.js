@@ -1,8 +1,17 @@
 # Rogue
 
-With Rogue, the server rendering configuration will be nearly invisible to you. You don't need a special `/pages` directory (like Nextjs) or a separate `routes.js` file (like Afterjs). All you need is the `App.js` entry point you'd usually have. This means that you can wrap your app in layouts/transitions/providers, etc. the same way you would in a regular React Application, and staying true to React's values, you can organize your code however you like.
+> The "nearly invisible" server-rendering framework for React applications
 
-We're able to simplify the server-rendering setup for your app, by assuming that you're using (or plan to use) two great technologies: [React Router](https://github.com/ReactTraining/react-router/) (for dynamic routing) and [Apollo Graphql](https://github.com/apollographql/apollo-client) (for querying data).
+- [Introduction](#introduction)
+- [Packages](#packages)
+
+## Introduction
+
+Rogue streamlines the process of creating server-rendered React applications.
+
+We call Rogue a "nearly invisible" framework, because it doesn't require a special `/pages` directory (like Nextjs) or a separate `routes.js` file (like Afterjs); all you need, is the `App.js` entry point you'd usually have. This means that you can wrap your app in layouts/transitions/providers, etc. the same way you would in a regular React Application, and staying true to React's values, you can organize your code however you like.
+
+We're able to give you back control of your application, because we leverage the elegance of [React Router](https://github.com/ReactTraining/react-router/) (for dynamic routing) and [Apollo Graphql](https://github.com/apollographql/apollo-client) (for querying data), which together dispense with the need to split your server-rendered routes into distinct entry points. With these tools, everything already happens on a per component basis, so we just handle the server-rendering setup for you.
 
 As an added benefit, Rogue also comes with first-class support for: State Management (Redux) and Css-in-Js (Emotion / Styled-Components).
 
@@ -27,6 +36,8 @@ const app = new Rogue(App)
 app.listen(3000)
 ```
 
+## Packages 
+
 There are three Rogue packages: 
 
 - [`@roguejs/app`](https://github.com/alidcastano/rogue.js/tree/master/packages/rogue-app), holds the core modules for the Rogue framework. You can use this package to streamline your SSR experience independent of any build setup.
@@ -37,22 +48,6 @@ higher order components that come preconfigured with SSR support for Rogue. You 
 *If you'd like to get started with Rogue now, we recommend you use [`@roguejs/app`](https://github.com/alidcastano/rogue.js/tree/master/packages/rogue-app) with your own custom build setup. Check out the [with-razzle](https://github.com/alidcastano/rogue.js/tree/master/examples/with-razzle) example to get started.*
 
 Each of the above packages holds its respective documentation inside its `README.md`.
-
-### Index
-
-- [Rogue Framework](https://github.com/alidcastano/rogue.js/tree/master/packages/rogue-app)
-  - [App Setup](https://github.com/alidcastano/rogue.js/tree/master/packages/rogue-app#app-setup)
-  - [App Concepts](https://github.com/alidcastano/rogue.js/tree/master/packages/rogue-app#app-concepts)
-    - [Server-rendering Logic](https://github.com/alidcastano/rogue.js/tree/master/packages/rogue-app#server-rendering-logic)
-  - [App Enhacements](https://github.com/alidcastano/rogue.js/tree/master/packages/rogue-app#app-enhancements)
-    - [Document Tags](https://github.com/alidcastano/rogue.js/tree/master/packages/rogue-app#document-tags)
-    - [Code Splitting](https://github.com/alidcastano/rogue.js/tree/master/packages/rogue-app#document-tags)
-  - [Custom Enhancements](https://github.com/alidcastano/rogue.js/tree/master/packages/rogue-app#custom-enhancements)
-  - [Custom Server](https://github.com/alidcastano/rogue.js/tree/master/packages/rogue-app#custom-server)
-- [Rogue Hocs](https://github.com/alidcastano/rogue.js/tree/master/packages/rogue-hocs)
-  - [CSS-in-JS](https://github.com/alidcastano/rogue.js/tree/master/packages/rogue-hocs#css-in-js)
-  - [State Management](https://github.com/alidcastano/rogue.js/tree/master/packages/rogue-hocs#state-management)
-  - [Apollo Graphql](https://github.com/alidcastano/rogue.js/tree/master/packages/rogue-hocs#apollo-graphql)
 
 ## Author
 
