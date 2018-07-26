@@ -1,6 +1,6 @@
 import React from 'react'
 import connect from 'connect'
-import appMiddleware from './appMiddleware'
+import appMiddleware from './rogueMiddleware'
 
 type MiddlewareArgs = Function/*handler*/ | [string/*route*/, Function/*handler*/]
 type Middlewares = Array<MiddlewareArgs>
@@ -9,7 +9,7 @@ const defaults = {
   bundleUrl: 'bundle.js'
 }
 
-export default class App {
+export default class Rogue {
   app: any 
   preMiddlewares: Middlewares
   postMiddlewares: Middlewares
@@ -50,6 +50,7 @@ export default class App {
    * Start app listening for requests.
    */
   listen (port: number, ...args) {
+    if (!this.initialized) this.initMiddleware()
     return this.app.listen(port, ...args)
   }
 

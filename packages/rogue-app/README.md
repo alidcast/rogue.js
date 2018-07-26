@@ -12,7 +12,7 @@
 
 ## App Setup
 
-Rogue comes with a lightweight middleware framework that you can use to streamline your SSR setup.
+Rogue comes with a lightweight middleware framework that you can use to streamline your server-rendering setup.
 
 First, install the package: 
 
@@ -55,7 +55,27 @@ const server = http.createServer(rogue.render)
 server.listen(3000)
 ```
 
-For an example of setting up Rogue with your own build system, check out the [with-razzle](https://github.com/alidcastano/rogue.js/tree/master/examples/with-razzle) example.
+Rogue doesn't impose any contraints in your applications structure, but we do recommend you take advantage of this fact by making your code it as modular as possible. Here's an example:
+
+```
+/src
+  / components # app wide components 
+  / layouts # page layouts, each one with its own nested components
+    / App
+      / Navigation
+      index.js # entry point for App layout (can be imported as src/layouts/App)
+    / Auth 
+  /pages # app routes, each one with its own nested routes and components
+    /Dashboard 
+      / NewsFeed
+      / Profile 
+      index.js # entry point for Dashboard page (can be imported as src/pages/Dashboard)
+    / Login
+    / Register
+  / store # app wide state
+  / utils # app wide utils 
+  App.js # your universal application
+```
 
 ## `rogue` API
 

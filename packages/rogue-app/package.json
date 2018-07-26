@@ -15,7 +15,7 @@
 		"access": "public"
 	},
 	"scripts": {
-		"bump": "npm run build && npm version patch && npm publish",
+		"prepublish": "npm run build && npm version patch && npm publish",
 		"build": "rollup -c"
 	},
 	"engines": {

@@ -2,7 +2,7 @@ import { Helmet } from 'react-helmet'
 import renderRoute from './renderRoute'
 import toHtml from './toHtml'
 
-export default function appMiddleware (App: React.ComponentType<any>, bundleUrl: string) {
+export default function rogueMiddleware (App: React.ComponentType<any>, bundleUrl: string) {
   return async function handler (req, res) {
     const routerContext = { url: null }
     const serverContext = { req, res }
@@ -25,11 +25,8 @@ export default function appMiddleware (App: React.ComponentType<any>, bundleUrl:
       res.end(html, 'utf8')
     } catch (err) {
       const content = JSON.stringify({ status: err.statusCode || 500, message: err.message, name: err.name }, undefined, 2)
-      // edge case: headers might be sent asynchronously before the error was caught
-      if (!res.headersSent) {
-        res.setHeader('Content-Type', 'text/json; charset=utf-8')
-        res.setHeader('Content-Length', Buffer.byteLength(content))
-      }
+      res.setHeader('Content-Type', 'text/json; charset=utf-8')
+      res.setHeader('Content-Length', Buffer.byteLength(content))
       res.end(content, 'utf-8')
     }
   }

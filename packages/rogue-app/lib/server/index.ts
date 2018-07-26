@@ -1,3 +1,3 @@
-import app from './app'
+import rogue from './rogue'
 
-export default app
+export default rogue
