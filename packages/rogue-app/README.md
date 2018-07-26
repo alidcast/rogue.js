@@ -20,7 +20,7 @@ First, install the package:
 npm install @roguejs/app
 ```
 
-In your `server.js` initialize your Rogue app: 
+In your `server.js` initialize your Rogue app by passing it your root App component and script to your client bundle: 
 
 ```js
 import Rogue from '@roguejs/app/server'
@@ -28,9 +28,9 @@ import { Helmet } from 'react-helmet'
 import serveStatic from 'serve-static'
 import App from './App'
 
-const rogue = new Rogue(App)
-
-rogue.preuse(serveStatic(process.env.PUBLIC_DIR))
+const rogue = new Rogue(App, {
+  bodyTags: [`<script src=${process.env.BUNDLE_URL} defer></script>`]
+})
 
 export default rogue
 ```
@@ -82,7 +82,8 @@ Rogue doesn't impose any contraints in your applications structure, but we do re
 * `rogue(App: React.Component, options: Object)`
 
 Accepts the following options:
-* `bundleUrl`: The location where your bundle will be served from. Defaults to `./bundle.js`.
+* `headTags`: array of head tags to include in html document.
+* `bodyTags`: array of body tags to include in html document.
 
 Has the following methods:
 
