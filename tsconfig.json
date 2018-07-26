@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "allowSyntheticDefaultImports": true,
+    "forceConsistentCasingInFileNames": true,
+    "experimentalDecorators": true,
+    "removeComments": false,
+    "preserveConstEnums": true,
+    "sourceMap": true,
+    "noImplicitAny": false,
+    "pretty": true,
+    "jsx": "react",
+    "target": "es2015",
+    "module": "commonjs"
+  }
+}
