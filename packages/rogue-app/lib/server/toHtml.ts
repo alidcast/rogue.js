@@ -13,12 +13,12 @@ export default function toHtml ({
       ${helmet.title.toString()}
       ${helmet.meta.toString()}
       ${helmet.link.toString()}
-      ${(headTags || []).join('/n')}
+      ${(headTags || []).join(' ')}
     </head>
     <body ${helmet.bodyAttributes.toString()}>
       <div id="${APP_ID}">${markup}</div>
       <script>window.${DATA_KEY} = ${serialize(data)};</script>
-      ${(bodyTags || []).join('/n')}
+      ${(bodyTags || []).join(' ')}
     </body>
   </html>`
 }

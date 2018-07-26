@@ -14,7 +14,8 @@ export default class Rogue {
   postMiddlewares: Array<Function/*handler*/ | [string/*route*/, Function/*handler*/]>
   initialized: boolean 
 
-  constructor (App: React.ComponentType<any>, options: RogueOptions = defaults) {
+  constructor (App: React.ComponentType<any>, userOptions: RogueOptions = {}) {
+    const options = Object.assign(defaults, userOptions)
     this.app = connect() 
     this.preMiddlewares = []
     this.postMiddlewares = [appMiddleware(App, options)]

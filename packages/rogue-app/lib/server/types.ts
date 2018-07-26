@@ -1,4 +1,4 @@
 export type RogueOptions = { 
-  headTags: string[], 
-  bodyTags: string[] 
+  headTags?: string[], 
+  bodyTags?: string[] 
 }

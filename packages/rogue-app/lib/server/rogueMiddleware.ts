@@ -10,7 +10,12 @@ export default function rogueMiddleware (App: React.ComponentType<any>, options:
     const serverContext = { req, res }
   
     try {
-      const { markup, data, headTags, bodyTags } = await renderRoute(App, routerContext, serverContext)
+      const { 
+        markup, 
+        data, 
+        headTags: routeHeadTags,
+        bodyTags: routeBodyTags 
+      } = await renderRoute(App, routerContext, serverContext)
 
       // redirected (see: https://reacttraining.com/react-router/web/api/StaticRouter/context-object)
       if (routerContext.url) {
@@ -21,9 +26,9 @@ export default function rogueMiddleware (App: React.ComponentType<any>, options:
       
       const helmet = Helmet.renderStatic()
   
-      headTags.concat(appHeadTags)
-      bodyTags.concat(appBodyTags)
-  
+      const headTags = [...appHeadTags, ...routeHeadTags]
+      const bodyTags = [...appBodyTags, ...routeBodyTags]
+
       const html = toHtml({ helmet, markup, data, headTags, bodyTags })
   
       res.setHeader('Content-Type', 'text/html; charset=utf-8')

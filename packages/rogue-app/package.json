@@ -1,6 +1,6 @@
 {
 	"name": "@roguejs/app",
-	"version": "0.7.0",
+	"version": "0.7.3",
 	"description": "A SSR experience for React that is quick and invisible",
 	"repository": "https://github.com/alidcastano/rogue/blob/master/packages/rogue-app",
 	"author": "Alid Castano",

@@ -6,7 +6,6 @@ import { getContext } from './context'
 
 export default async function renderRoute (App, routerContext, { req, res }) {
   const ctx = getContext({ req, res }) as any
-
   const data = await getInitialProps(App, ctx)
   
   const RoutableApp = h(StaticRouter, { context: routerContext, location: req.url }, h(App, data))
