@@ -16,6 +16,7 @@
 	},
 	"scripts": {
 		"prepublish": "npm run build && npm version patch && npm publish",
+		"test": "cd ../.. && npm run test",
 		"build": "rollup -c"
 	},
 	"engines": {

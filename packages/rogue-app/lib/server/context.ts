@@ -1,6 +1,6 @@
 import  { StaticRouter } from 'react-router-dom'
 import { createElement as h } from 'react'
-import url from 'url'
+import * as url from 'url'
 import { isServer } from '../shared'
 
 export function getContext ({ req, res }) {

@@ -25,7 +25,7 @@ export default function rogueMiddleware (App: React.ComponentType<any>, bundleUr
       res.end(html, 'utf8')
     } catch (err) {
       const content = JSON.stringify({ status: err.statusCode || 500, message: err.message, name: err.name }, undefined, 2)
-      // edge case: headers might be sent asynchronously before the error was caught
+      // edge case: headers might be sent asynchronously before the error is caught
         if (!res.headersSent) {
         res.setHeader('Content-Type', 'text/json; charset=utf-8')
         res.setHeader('Content-Length', Buffer.byteLength(content))
