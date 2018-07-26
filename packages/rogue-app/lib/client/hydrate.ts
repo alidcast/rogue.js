@@ -8,22 +8,13 @@ export default function hydrate (App: React.ComponentType<any>) {
   const data = getSsrData()
   
   return loadComponents().then(() => (
-    mountComponent(
+    ReactDOM.hydrate(
       h(BrowserRouter, {}, h(App, data)), 
       document.getElementById(APP_ID)
     )   
   ))
 }
 
-
 function getSsrData () {
-  return typeof window !== undefined ? window[DATA_KEY] : null
-}
-
-// only hydrate if is initial render (prevents client-server mistach in development)
-let isInitialRender = true
-function mountComponent (element, container) {
-  if (!isInitialRender) return ReactDOM.render(element, container)
-  ReactDOM.hydrate(element, container)
-  isInitialRender = false
+  return typeof window !== undefined ? window[DATA_KEY] : {}
 }
