@@ -9,6 +9,7 @@ let currentApp = app
 server.listen(PORT, error => {
   if (error) console.log(error)
 
+  // open App url when server is started
   require('child_process').exec(`${
     process.platform == 'darwin' ? 'open' : process.platform == 'win32' ? 'start' : 'xdg-open'
   } http://localhost:${PORT}`)

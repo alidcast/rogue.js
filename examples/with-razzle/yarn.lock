@@ -92,9 +92,9 @@
     lodash "^4.2.0"
     to-fast-properties "^2.0.0"
 
-"@roguejs/app@0.6.9":
-  version "0.6.9"
-  resolved "https://registry.yarnpkg.com/@roguejs/app/-/app-0.6.9.tgz#24b7078bf11387ae8648799f929e6dcab877df1b"
+"@roguejs/app@^0.7.0":
+  version "0.7.0"
+  resolved "https://registry.yarnpkg.com/@roguejs/app/-/app-0.7.0.tgz#a8e6d6a5cc401898b18b816e949f9e8e5703d62b"
   dependencies:
     connect "^3.6.6"
     loadable-components "^2.2.2"

@@ -6,7 +6,11 @@ import App from './App'
 const publicDir = process.env.RAZZLE_PUBLIC_DIR
 const bundleUrl = require(process.env.RAZZLE_ASSETS_MANIFEST).client.js
 
-const app = new Rogue(App, { bundleUrl })
+const app = new Rogue(App, { 
+  bodyTags: [
+    `<script src="${bundleUrl}" defer></script>`
+  ]
+})
 
 app.preuse(serveStatic(publicDir))
 
