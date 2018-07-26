@@ -1,24 +1,23 @@
 import React from 'react'
 import connect from 'connect'
 import appMiddleware from './rogueMiddleware'
+import { RogueOptions } from './types'
 
-type MiddlewareArgs = Function/*handler*/ | [string/*route*/, Function/*handler*/]
-type Middlewares = Array<MiddlewareArgs>
-
-const defaults = {
-  bundleUrl: 'bundle.js'
+const defaults: RogueOptions = {
+  headTags: [],
+  bodyTags: []
 }
 
 export default class Rogue {
   app: any 
-  preMiddlewares: Middlewares
-  postMiddlewares: Middlewares
+  preMiddlewares: Array<Function/*handler*/ | [string/*route*/, Function/*handler*/]>
+  postMiddlewares: Array<Function/*handler*/ | [string/*route*/, Function/*handler*/]>
   initialized: boolean 
 
-  constructor (App: React.ComponentType<any>, { bundleUrl } = defaults) {
+  constructor (App: React.ComponentType<any>, options: RogueOptions = defaults) {
     this.app = connect() 
     this.preMiddlewares = []
-    this.postMiddlewares = [appMiddleware(App, bundleUrl)]
+    this.postMiddlewares = [appMiddleware(App, options)]
     this.initialized = false
   }
   

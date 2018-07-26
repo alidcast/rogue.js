@@ -1,24 +1,30 @@
 import { Helmet } from 'react-helmet'
 import renderRoute from './renderRoute'
 import toHtml from './toHtml'
+import { RogueOptions } from './types'
 
-export default function rogueMiddleware (App: React.ComponentType<any>, bundleUrl: string) {
+export default function rogueMiddleware (App: React.ComponentType<any>, options: RogueOptions) {
+  const { headTags: appHeadTags, bodyTags: appBodyTags } = options
   return async function handler (req, res) {
     const routerContext = { url: null }
     const serverContext = { req, res }
   
     try {
       const { markup, data, headTags, bodyTags } = await renderRoute(App, routerContext, serverContext)
-       
+
       // redirected (see: https://reacttraining.com/react-router/web/api/StaticRouter/context-object)
       if (routerContext.url) {
         res.writeHead(302, { Location: routerContext.url })
         res.end()
         return 
       }
-    
+      
       const helmet = Helmet.renderStatic()
-      const html = toHtml({ helmet, markup, data, bundleUrl, headTags, bodyTags })
+  
+      headTags.concat(appHeadTags)
+      bodyTags.concat(appBodyTags)
+  
+      const html = toHtml({ helmet, markup, data, headTags, bodyTags })
   
       res.setHeader('Content-Type', 'text/html; charset=utf-8')
       res.setHeader('Content-Length', Buffer.byteLength(html))

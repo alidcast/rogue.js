@@ -2,12 +2,7 @@ import serialize from 'serialize-javascript'
 import { APP_ID, DATA_KEY } from '../shared/constants'
 
 export default function toHtml ({
-  helmet, 
-  markup,
-  data,
-  bundleUrl,
-  headTags, 
-  bodyTags
+  helmet, markup, data, headTags, bodyTags
 }) {
   return `<!doctype html> 
   <html ${helmet.htmlAttributes.toString()}>
@@ -22,7 +17,6 @@ export default function toHtml ({
     </head>
     <body ${helmet.bodyAttributes.toString()}>
       <div id="${APP_ID}">${markup}</div>
-      <script src="${bundleUrl}" defer></script>
       <script>window.${DATA_KEY} = ${serialize(data)};</script>
       ${(bodyTags || []).join('/n')}
     </body>
