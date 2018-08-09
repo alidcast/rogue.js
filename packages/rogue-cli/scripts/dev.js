@@ -20,7 +20,9 @@ createBundlers().then(({ clientBundler, serverBundler }) => {
     server = http.createServer(app.render)
 
     server.listen(PORT, error => {
-      if (error){ console.log(error)} else {
+      if (error){
+        console.log(error)
+      } else {
         console.log(`App starts on port: ${PORT}`)
       }
     })
