@@ -1,6 +1,6 @@
 {
 	"name": "@roguejs/cli",
-	"version": "0.6.11",
+	"version": "0.6.13",
 	"repository": "https://github.com/alidcastano/rogue/tree/master/packages/rogue-cli",
 	"author": "Alid Castano",
 	"license": "MIT",
