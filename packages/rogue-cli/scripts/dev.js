@@ -20,7 +20,11 @@ createBundlers().then(({ clientBundler, serverBundler }) => {
     server = http.createServer(app.render)
 
     server.listen(PORT, error => {
-      if (error) console.log(error)
+      if (error){
+        console.log(error)
+      } else {
+        console.log(`App starts on port: ${PORT}`)
+      }
     })
   }
 
@@ -37,6 +41,10 @@ createBundlers().then(({ clientBundler, serverBundler }) => {
       await clientBundler.bundle()
       restartApp()
     }
+  })
+
+  clientBundler.on('buildError', (e) => {
+    console.error('Error while building client bundle', e);
   })
 
   bundleApp(clientBundler, serverBundler).then(() => {
