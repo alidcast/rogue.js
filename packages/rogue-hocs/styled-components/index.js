@@ -14,7 +14,7 @@ const withStyles = (theme = {}) => App => {
 
   RogueStyledProvider.getInitialProps = async function (ctx) {
     const sheet = new ServerStyleSheet()
-    sheet.collectStyles(ctx.app.routable(App))
+    sheet.collectStyles(ctx.app.routable(h(App)))
     ctx.app.headTags.push(sheet.getStyleTags())
     
     let props = {}
