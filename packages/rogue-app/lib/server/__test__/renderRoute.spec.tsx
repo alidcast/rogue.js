@@ -1,7 +1,5 @@
 import * as React from 'react'
 import renderRoute from '../renderRoute'
-// import { StaticRouter, Switch, Route } from 'react-router-dom'
-// import loadProps from '../loadProps'
 
 let fakeInitialProps = jest.fn()
 
@@ -24,19 +22,21 @@ beforeEach(() => {
   fakeInitialProps.mockReset()
 })
 
-test('It loads app', async () => {
-  await renderRoute(App, {}, serverCtx)
-  expect(fakeInitialProps.mock.calls.length).toBe(1)
-})
-
-test('It loads app with one provider', async () => {
-  const EnhancedApp = withHoc(App)
-  await renderRoute(EnhancedApp, {}, serverCtx)
-  expect(fakeInitialProps.mock.calls.length).toBe(2)
-})
-
-test('It loads app with multiple providers', async () => {
-  const EnhancedApp = withHoc(withHoc(App))
-  await renderRoute(EnhancedApp, {}, serverCtx)
-  expect(fakeInitialProps.mock.calls.length).toBe(3)
+describe('renderRoute', () => {
+  test('It loads app', async () => {
+    await renderRoute(App, {}, serverCtx)
+    expect(fakeInitialProps.mock.calls.length).toBe(1)
+  })
+  
+  test('It loads app with one provider', async () => {
+    const EnhancedApp = withHoc(App)
+    await renderRoute(EnhancedApp, {}, serverCtx)
+    expect(fakeInitialProps.mock.calls.length).toBe(2)
+  })
+  
+  test('It loads app with multiple providers', async () => {
+    const EnhancedApp = withHoc(withHoc(App))
+    await renderRoute(EnhancedApp, {}, serverCtx)
+    expect(fakeInitialProps.mock.calls.length).toBe(3)
+  })
 })

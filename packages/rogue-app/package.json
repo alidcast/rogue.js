@@ -1,6 +1,6 @@
 {
 	"name": "@roguejs/app",
-	"version": "0.7.6",
+	"version": "0.7.8",
 	"description": "A SSR experience for React that is quick and invisible",
 	"repository": "https://github.com/alidcastano/rogue/blob/master/packages/rogue-app",
 	"author": "Alid Castano",
@@ -47,6 +47,7 @@
 		"babel-jest": "^23.2.0",
 		"babel-preset-env": "^1.7.0",
 		"babel-preset-react": "^6.24.1",
+		"cheerio": "^1.0.0-rc.2",
 		"react": "^16.4.1",
 		"react-dom": "^16.4.1",
 		"react-router": "^4.3.1",
