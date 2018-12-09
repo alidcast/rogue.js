@@ -6,7 +6,6 @@
     - [`getInitialProps`](#getinitialprops-ctx--data--void)
 - [App Enhancements](#app-enhancements)
   - [Document Tags](#document-tags)
-  - [Code Splitting](#code-splitting)
 - [Custom Enhancements](#custom-enhancements)
 - [Custom Server](#custom-server)
 
@@ -59,22 +58,15 @@ Rogue doesn't impose any contraints in your applications structure, but we do re
 
 ```
 /src
-  / components # app wide components 
-  / layouts # page layouts, each one with its own nested components
-    / App
-      / Navigation
-      index.js # entry point for App layout (can be imported as src/layouts/App)
-    / Auth 
-  /pages # app routes, each one with its own nested routes and components
+  /pages
     /Dashboard 
       / NewsFeed
+        / PostList
       / Profile 
-      index.js # entry point for Dashboard page (can be imported as src/pages/Dashboard)
+      index.js
     / Login
     / Register
-  / store # app wide state
-  / utils # app wide utils 
-  App.js # your universal application
+  App.js
 ```
 
 ## `rogue` API
@@ -144,13 +136,9 @@ This data will then be passed to the component exported from your `App.js` file.
 
 ## App Enhancements
 
-Rogue makes it easy to enhance your app with functionality.
+Rogue makes it easy to enhance your app with ssr compatible functionality.
 
-For some enhancements, if the community already preferred a certain solution or if support for other options just wouldn't have worked (e.g. because it required Webpack), then we made support for them automatic and included them below.
-
-However, for customizations such as state management and CSS-in-JS, where the community is divided on which solution to use, then we made support optional via higher-order components, or hocs. You can find more information about these hocs in our [`@roguejs/hocs`](https://github.com/alidcastano/rogue.js/tree/master/packages/rogue-hocs). 
-
-*Note: Make sure to read the respective packages documentation for usage information.*
+The only enhancement that comes built-in to Rogue is [document tag management](#document-tags). For common customizations such as state management and CSS-in-JS, we made support optional via higher-order components, or hocs. You can find more information about these hocs in our [`@roguejs/hocs`](https://github.com/alidcastano/rogue.js/tree/master/packages/rogue-hocs). 
 
 ## Document Tags 
 
@@ -168,39 +156,6 @@ export default () => (
     </Helmet>
     <MyAmazingApp />
   </React.Fragment>
-)
-```
-
-### Code Splitting
-
-Rogue has automatic support for code splitting via [loadable-components](https://github.com/smooth-code/loadable-components). 
-
-All you have to do is configure your babel to handle the code split files:
-
-```json
-// .babelrc
-{
-  "plugins": [
-    "dynamic-import-node",
-    "loadable-components/babel"
-  ]
-}
-```
-
-Now you can code split anywhere in your application. Here's an example:
-
-```js
-import { Route } from 'react-router'
-import loadable from 'loadable-components'
-
-export const Dashboard = loadable(() => import('./Dashboard'))
-export const Landing = loadable(() => import('./Landing'))
-
-export default () => (
-  <Switch>
-    <Route exact path="/" component={Dashboard} />
-    <Route path="/welcome" component={Landing} />
-  </Switch>
 )
 ```
 
