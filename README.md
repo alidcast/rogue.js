@@ -43,9 +43,9 @@ import App from './App'
 hydrate(App)
 ```
 
-And that's it! With just a few lines of code, you have a server rendered React application.
+And that's it! With just a few lines of code, you've setup a server-rendered React application.
 
-To get you're application running, we recommend an SSR build tool such as [razzle](https://github.com/jaredpalmer/razzle). Check out the [with-razzle](https://github.com/alidcastano/rogue.js/tree/master/examples/with-razzle) example to see how to get started.
+To get your application running, we recommend an SSR build tool such as [razzle](https://github.com/jaredpalmer/razzle). Check out the [with-razzle](https://github.com/alidcastano/rogue.js/tree/master/examples/with-razzle) example to see how to get started.
 
 Rogue can also be used with [`react-native-web`](https://github.com/necolas/react-native-web/). If you're interested in this, check out the [with-react-native](https://github.com/alidcastano/rogue.js/tree/master/examples/with-react-native) example.
 
@@ -60,7 +60,6 @@ Accepts the following options:
 
 Has the following methods:
 
-* `preuse(fn)`: `Function` to add a middleware before the render middleware.
 * `use(fn)`: `Function` to add a middleware after the render middleware.
 * `render(req, res)`: `Function` to run the rogue middleware stack against Node's `req` and `res` objects.
 * `listen(port, callback)`: `Function` to start the app listening for requests. Alias to Nodejs [`server.listen`](https://nodejs.org/dist/latest-v6.x/docs/api/http.html#http_server_listen_port_hostname_backlog_callback).
@@ -128,7 +127,7 @@ export default () => (
 )
 ```
 
-To manage document tags for server-logic, you can use Rogue's `ctx` object. Here's an example of how you might use Rogue's API to setup a CSS-in-JS library such as styled-components:
+To manage document tags for server-logic, you can use Rogue's [`ctx.app`](#rogue-ctx-object) object. Here's an example of how you might use Rogue's API to setup a CSS-in-JS library such as styled-components:
 
 ```js
 
@@ -152,17 +151,17 @@ const app = rouge(App, process.env.BUNDLE_URL, {
 You can use Rogue with your own custom server. Simply pass [`rogue.render`](https://github.com/alidcastano/rogue.js/tree/master/packages/rogue-app#rogue-api) to your app's middleware:
 
 ```js
-import Rogue from '@roguejs/app/server'
+import rogue from '@roguejs/app/server'
 import express from 'express'
 import App from './app/App'
 
-const rogue = new Rogue(App)
+const app = rouge(App, process.env.BUNDLE_URL)
 
-const app = express()
+const server = express()
 
-app.use(rogue.render)
+server.use(app.render)
 
-export default app
+export default server
 ```
 
 ## Packages 
