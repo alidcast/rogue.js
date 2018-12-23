@@ -29,11 +29,11 @@ export default function rogueMiddleware (App: React.ComponentType<any>, {
         return 
       }
       
+      const helmet = Helmet.renderStatic()
       headTags.push(...ctx.app.headTags)
       bodyTags.push(...ctx.app.bodyTags)
 
-      const helmet = Helmet.renderStatic()
-      const html = toHtml({ helmet, markup, data, headTags, bodyTags })
+      const html = toHtml({ markup, data, helmet, headTags, bodyTags })
   
       res.setHeader('Content-Type', 'text/html; charset=utf-8')
       res.setHeader('Content-Length', Buffer.byteLength(html))

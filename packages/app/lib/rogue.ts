@@ -10,14 +10,12 @@ export type RogueOptions = {
 
 export default class Rogue {
   app: any 
-  preMiddlewares: Array<Function | [string, Function]>
-  postMiddlewares: Array<Function | [string, Function]>
+  middlewares: Array<Function | [string, Function]>
   initialized: boolean 
 
   constructor (App: React.ComponentType<any>, options: RogueOptions = {}) {
     this.app = connect() 
-    this.preMiddlewares = []
-    this.postMiddlewares = [rogueMiddleware(App, options)]
+    this.middlewares = [rogueMiddleware(App, options)]
     this.initialized = false
   }
   
@@ -32,17 +30,9 @@ export default class Rogue {
   /*
   * Middleware to be used before app middleware.
   */
-  preuse (routeOrHandler: string | Function, handler?: Function) {
-    if (handler) this.preMiddlewares.push([routeOrHandler as string, handler])
-    else this.preMiddlewares.push(routeOrHandler as Function)
-  }
-
-  /*
-  * Middleware to be used after app middleware.
-  */
   use (routeOrHandler: string | Function, handler?: Function) {
-    if (handler) this.postMiddlewares.push([routeOrHandler as string, handler])
-    else this.postMiddlewares.push(routeOrHandler as Function)
+    if (handler) this.middlewares.unshift([routeOrHandler as string, handler])
+    else this.middlewares.unshift(routeOrHandler as Function)
   }
 
   /**
@@ -55,9 +45,7 @@ export default class Rogue {
 
   private initMiddleware () {
     const { app } = this
-    const useMiddleware = m => Array.isArray(m) ? app.use(m[0]/*path*/, m[1]/*handler*/) : app.use(m)
-    this.preMiddlewares.forEach(useMiddleware)
-    this.postMiddlewares.forEach(useMiddleware)
+    this.middlewares.forEach(m => Array.isArray(m) ? app.use(m[0], m[1]) : app.use(m))
     this.initialized = true
   }
 }
