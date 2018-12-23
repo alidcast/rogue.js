@@ -1,4 +1,4 @@
-import Rogue from '@roguejs/app/'
+import rogue from '@roguejs/app/server'
 import ReactDOM from 'react-dom/server'
 import { AppRegistry } from 'react-native-web'
 import serveStatic from 'serve-static'
@@ -11,7 +11,7 @@ const bundleUrl = require(process.env.RAZZLE_ASSETS_MANIFEST).client.js
 // import rogue from '@roguejs/app/server.native'
 // const app = rogue(App, bundleUrl)
 
-const app = new Rogue(App, {
+const app = rogue(App, bundleUrl, {
   renderToString(node, ctx) {
     AppRegistry.registerComponent('App', () => () => node)
     const { element, getStyleElement } = AppRegistry.getApplication('App')
@@ -21,12 +21,9 @@ const app = new Rogue(App, {
 
     const html = ReactDOM.renderToString(element)
     return html
-  },
-  bodyTags: [
-    `<script src=${bundleUrl} defer /></script>`,
-  ],
+  }
 })
 
-app.preuse(serveStatic(publicDir))
+app.use(serveStatic(publicDir))
 
 export default app
