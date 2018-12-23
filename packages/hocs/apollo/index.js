@@ -1,4 +1,4 @@
-const { isServer } = require('@roguejs/app')
+const { isServer } = require('@roguejs/app/utils')
 
 const { createElement: h } = require('react')
 const { ApolloProvider, getDataFromTree } = require('react-apollo')
