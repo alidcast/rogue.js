@@ -7,38 +7,8 @@ All you have to do is import and initialize the desired hoc in your `App.js` fil
 *Note: Make sure to read the respective packages documentation for usage information.*
 
 **Table of Contents**
-- [CSS-in-JS](#css-in-js)
 - [State Management](#state-management)
 - [Apollo Graphql](#apollo-graphql)
-
-## CSS-in-JS
-
-Rogue has first class support for [emotion](https://emotion.sh) and [styled-components](https://styled-components.com).
-
-First, install your chosen library: 
-
-```bash
-npm install --save styled-components
-// or
-npm install --save emotion react-emotion emotion-theming emotion-server
-```
-
-Then import the `hoc` for your chosen package in your `App.js` file:
-
-For example: 
-
-```js
-import withStyles from 'rogue/hocs/emotion'
-// or
-import withStyles from 'rogue/hocs/styled-components'
-import { theme } from './styles/' // optional
-
-const App = () => (...) 
-
-export default withStyles(theme)(App)
-```
-
-That's it; now you have SSR support for your styles, so style away!
 
 ## State management
 
@@ -129,7 +99,6 @@ const App = () => (...)
 
 export default compose(
   withApollo(createClient),
-  withStore(createStore),
-  withStyles(theme)
+  withStore(createStore)
 )(App)
 ```
