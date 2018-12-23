@@ -27,6 +27,6 @@ const app = new Rogue(App, {
   ],
 })
 
-app.use(serveStatic(publicDir))
+app.preuse(serveStatic(publicDir))
 
 export default app
