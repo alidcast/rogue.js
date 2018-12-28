@@ -1,3 +1,4 @@
+import { BUNDLE_SRC, PUBLIC_DIR } from '@roguejs/cli'
 import ReactDOM from 'react-dom/server'
 import { AppRegistry } from 'react-native'
 import Rogue from '@roguejs/app'
@@ -13,7 +14,7 @@ const app = new Rogue(App, {
     ctx.app.headTags.push(styleElement)
     return html
   },
-  bodyTags: [`<script src="bundle.js" defer /></script>`],
+  bodyTags: [`<script src=${BUNDLE_SRC} defer /></script>`],
 })
 
 // https://github.com/alidcastano/rogue.js/issues/78
@@ -23,6 +24,6 @@ const app = new Rogue(App, {
 // import App from './App'
 // const app = new Rogue(App, 'bundle.js')
 
-app.use(serveStatic(`.rogue/build/public`))
+app.use(serveStatic(BUILD_DIR))
 
 export default app

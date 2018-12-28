@@ -597,9 +597,9 @@
     react-native "^0.57.8"
     react-native-web "^0.9.10"
 
-"@roguejs/cli@0.9.2":
-  version "0.9.2"
-  resolved "https://registry.yarnpkg.com/@roguejs/cli/-/cli-0.9.2.tgz#ca7f9ca3195fa586e6b9a3a93afa2b9fcbeaef9a"
+"@roguejs/cli@0.9.5":
+  version "0.9.5"
+  resolved "https://registry.yarnpkg.com/@roguejs/cli/-/cli-0.9.5.tgz#55a501bf670659eca6537c875a4db66cccc28bbc"
   dependencies:
     serve-static "^1.13.2"
 
