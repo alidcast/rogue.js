@@ -54,50 +54,7 @@ export default () => <div>Welcome to Rogue.js!</div>
 
 Finally, run `npm run dev` and go to `http://localhost:3000`.
 
-Think you'll need a more advanced advanced configuration? You can always eject from our built-in `client` and `server` builds by creating your own `client.js` and `server.js` entry points, respectively. See [running-programmatically](#running-programmatically) and [advanced-usage](#advanced-usage) for more information.
-
-### Running programmtically
-
-In your `server.js` initialize your Rogue app by passing it your root App component and script to your client bundle: 
-
-```js
-import rogue from '@roguejs/app/server'
-import App from './App'
-
-const app = rouge(App, process.env.BUNDLE_URL)
-
-app.listen(4000)
-```
-
-In your `client.js` hydrate your Rogue app:
-
-```js
-import hydrate from '@roguejs/app/client'
-import App from './App'
-
-hydrate(App)
-```
-
-And that's it! With just a few lines of code, you've setup a server-rendered React application.
-
-The fastest way to get your application up and running is via [roguejs/cli](#running-via-@roguejs/cli). However, you can also run Rogue with other SSR build tools, such as [razzle](https://github.com/jaredpalmer/razzle) (see the [with-razzle](https://github.com/alidcastano/rogue.js/tree/master/examples/with-razzle) example). 
-
-Rogue can also be used with other frameworks, such as [`react-native-web`](https://github.com/necolas/react-native-web/) (see the [with-react-native](https://github.com/alidcastano/rogue.js/tree/master/examples/with-react-native-web) example.)
-
-#### `rogue` API
-
-* `rogue(App: React.Component, bundleUrl: string, options: Object)`
-
-Accepts the following options:
-* `renderToString(app, ctx)`: a custom metho for rendering app node to static markup.
-* `headTags`: array of head tags to include in html document.
-* `bodyTags`: array of body tags to include in html document.
-
-Has the following methods:
-
-* `use(fn)`: `Function` to add a middleware after the render middleware.
-* `render(req, res)`: `Function` to run the rogue middleware stack against Node's `req` and `res` objects.
-* `listen(port, callback)`: `Function` to start the app listening for requests. Alias to Nodejs [`server.listen`](https://nodejs.org/dist/latest-v6.x/docs/api/http.html#http_server_listen_port_hostname_backlog_callback).
+Think you'll need a more advanced advanced configuration? You can always eject from our built-in `client` and `server` builds by creating your own `client.js` and `server.js` entry points, respectively. See [running-programmatically](#running-programmtically) for more information.
 
 ### Server-rendering logic
 
@@ -180,6 +137,49 @@ const app = rouge(App, process.env.BUNDLE_URL, {
 ```
 
 ## Advanced Usage
+
+### Running programmtically
+
+In your `server.js` initialize your Rogue app by passing it your root App component and script to your client bundle: 
+
+```js
+import rogue from '@roguejs/app/server'
+import App from './App'
+
+const app = rouge(App, process.env.BUNDLE_URL)
+
+app.listen(4000)
+```
+
+In your `client.js` hydrate your Rogue app:
+
+```js
+import hydrate from '@roguejs/app/client'
+import App from './App'
+
+hydrate(App)
+```
+
+And that's it! With just a few lines of code, you've setup a server-rendered React application.
+
+The fastest way to get your application up and running is via [roguejs/cli](#running-via-@roguejs/cli). However, you can also run Rogue with other SSR build tools, such as [razzle](https://github.com/jaredpalmer/razzle) (see the [with-razzle](https://github.com/alidcastano/rogue.js/tree/master/examples/with-razzle) example). 
+
+Rogue can also be used with other frameworks, such as [`react-native-web`](https://github.com/necolas/react-native-web/) (see the [with-react-native](https://github.com/alidcastano/rogue.js/tree/master/examples/with-react-native-web) example.)
+
+#### `rogue` API
+
+* `rogue(App: React.Component, bundleUrl: string, options: Object)`
+
+Accepts the following options:
+* `renderToString(app, ctx)`: a custom metho for rendering app node to static markup.
+* `headTags`: array of head tags to include in html document.
+* `bodyTags`: array of body tags to include in html document.
+
+Has the following methods:
+
+* `use(fn)`: `Function` to add a middleware after the render middleware.
+* `render(req, res)`: `Function` to run the rogue middleware stack against Node's `req` and `res` objects.
+* `listen(port, callback)`: `Function` to start the app listening for requests. Alias to Nodejs [`server.listen`](https://nodejs.org/dist/latest-v6.x/docs/api/http.html#http_server_listen_port_hostname_backlog_callback).
 
 ### Custom Server
 
