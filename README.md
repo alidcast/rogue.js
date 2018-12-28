@@ -3,9 +3,9 @@
 > The "nearly invisible" server-rendering framework for React applications
 
 - [Introduction](#introduction)
+- [Packages](#packages)
 - [Getting Started](#getting-started)
 - [Advanced Usage](#advanced-usage)
-- [Packages](#packages)
 
 ## Introduction
 
@@ -15,13 +15,48 @@ We call Rogue a _nearly invisible_ library, because it doesn't require a special
 
 We're able to give you back control of your application, because we leverage [React Router](https://github.com/ReactTraining/react-router/) (for dynamic routing) and [Apollo Graphql](https://github.com/apollographql/apollo-client) (for querying data), which together dispense with the need to split your server-rendered routes into distinct entry points. With these libraries, everything already happens on a per component basis, so we just handle the server-rendering setup for you.
 
+## Packages 
+
+There are three Rogue packages: 
+
+- [`@roguejs/app`](https://github.com/alidcastano/rogue.js/tree/master/packages/app), holds the core modules for the Rogue library. You can use this package to streamline your SSR experience independent of any build setup.
+- [`@roguejs/hocs`](https://github.com/alidcastano/rogue.js/tree/master/packages/hocs), holds
+higher order components that come preconfigured with SSR support for Rogue. You can use this package to enhance your application without uncessary SSR boilerplate.
+- [`@roguejs/cli`](https://github.com/alidcastano/rogue.js/tree/master/packages/cli) (BETA), holds the build and development system for the Rogue framework, built using [Parcel.js](https://github.com/parcel-bundler/parcel/). You can use this package to power a Rogue app with zero configuration.
+
+The fastest way to get up and running with rogue is via [@roguejs/cli](#running-via-@roguejs/cli). If you'd like to setup Rogue with another SSR built tool, you can also run rogue [programmatically](#running-programmatically).
+
 ## Getting Started
 
-First, install the package: 
+### Running via `@roguejs/cli`
 
+First, install the packages: 
+
+```bash
+npm install @roguejs/cli @roguejs/app
 ```
-npm install @roguejs/app
+
+Add the following scripts to your `package.json`:
+
+```json
+"scripts": {
+  "dev": "rogue dev",
+  "build": "rogue build",
+  "start": "rogue start"
+}
 ```
+
+Create an `App.js` entry point in your `src` directory:
+
+```js
+export default () => <div>Welcome to Rogue.js!</div>
+```
+
+Finally, run `npm run dev` and go to `http://localhost:3000`.
+
+Once you need a more advanced advanced configuration, you can eject from our built-in `client` and server` builds by creating your own `client.js` and `server.js` entry points, respectively. See [#running-programmatically] and [#advanced-usage] for more information.
+
+### Running programmtically
 
 In your `server.js` initialize your Rogue app by passing it your root App component and script to your client bundle: 
 
@@ -45,9 +80,9 @@ hydrate(App)
 
 And that's it! With just a few lines of code, you've setup a server-rendered React application.
 
-To get your application running, we recommend an SSR build tool such as [razzle](https://github.com/jaredpalmer/razzle). Check out the [with-razzle](https://github.com/alidcastano/rogue.js/tree/master/examples/with-razzle) example to see how to get started.
+The fastest way to get your application up and running is via [roguejs/cli](#running-via-@roguejs/cli). However, you can also run Rogue with other SSR build tools, such as [razzle](https://github.com/jaredpalmer/razzle) (see the [with-razzle](https://github.com/alidcastano/rogue.js/tree/master/examples/with-razzle) example). 
 
-Rogue can also be used with [`react-native-web`](https://github.com/necolas/react-native-web/). If you're interested in this, check out the [with-react-native](https://github.com/alidcastano/rogue.js/tree/master/examples/with-react-native) example.
+Rogue can also be used with other frameworks, such as [`react-native-web`](https://github.com/necolas/react-native-web/) (see the [with-react-native](https://github.com/alidcastano/rogue.js/tree/master/examples/with-react-native-web) example.)
 
 #### `rogue` API
 
@@ -148,7 +183,7 @@ const app = rouge(App, process.env.BUNDLE_URL, {
 
 ### Custom Server
 
-You can use Rogue with your own custom server. Simply pass [`rogue.render`](https://github.com/alidcastano/rogue.js/tree/master/packages/rogue-app#rogue-api) to your app's middleware:
+You can use Rogue with your own custom server. Simply pass [`rogue.render`](#rogue-api) to your app's middleware:
 
 ```js
 import rogue from '@roguejs/app/server'
@@ -163,14 +198,6 @@ server.use(app.render)
 
 export default server
 ```
-
-## Packages 
-
-There are two Rogue packages: 
-
-- [`@roguejs/app`](https://github.com/alidcastano/rogue.js/tree/master/packages/rogue-app), holds the core modules for the Rogue library. You can use this package to streamline your SSR experience independent of any build setup.
-- [`@roguejs/hocs`](https://github.com/alidcastano/rogue.js/tree/master/packages/rogue-hocs), holds
-higher order components that come preconfigured with SSR support for Rogue. You can use this package to enhance your application without uncessary SSR boilerplate.
 
 ## Author
 
