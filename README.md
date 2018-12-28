@@ -33,7 +33,7 @@ The fastest way to get up and running with rogue is via [@roguejs/cli](#running-
 First, install the packages: 
 
 ```bash
-npm install @roguejs/cli @roguejs/app
+npm install @roguejs/cli @roguejs/app react react-dom react-router react-router-dom
 ```
 
 Add the following scripts to your `package.json`:
