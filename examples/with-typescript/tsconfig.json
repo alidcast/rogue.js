@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "lib": ["es2017", "dom"],
+    "jsx": "preserve",
+    "target": "esnext",
+    "module": "esnext",
+    "moduleResolution": "node",
+    "noEmit": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "forceConsistentCasingInFileNames": true,
+    "sourceMap": true,
+    "skipLibCheck": true,
+  }
+}
