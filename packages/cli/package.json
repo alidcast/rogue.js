@@ -4,7 +4,7 @@
 	"repository": "https://github.com/alidcastano/rogue/tree/master/packages/rogue-cli",
 	"author": "Alid Castano",
 	"license": "MIT",
-	"main": "index.js",
+	"main": "main.js",
 	"publishConfig": {
 		"access": "public"
 	},
