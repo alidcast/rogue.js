@@ -24,7 +24,7 @@ There are three Rogue packages:
 higher order components that come preconfigured with SSR support for Rogue. You can use this package to enhance your application without uncessary SSR boilerplate.
 - [`@roguejs/cli`](https://github.com/alidcastano/rogue.js/tree/master/packages/cli) (BETA), holds the build and development system for the Rogue framework, built using [Parcel.js](https://github.com/parcel-bundler/parcel/). You can use this package to power a Rogue app with zero configuration.
 
-The fastest way to get up and running with rogue is via [@roguejs/cli](#running-via-@roguejs/cli). If you'd like to setup Rogue with another SSR built tool, you can also run rogue [programmatically](#running-programmatically).
+The fastest way to get up and running with rogue is via [@roguejs/cli](#running-via-roguejscli). If you'd like to setup Rogue with another SSR built tool, you can also run rogue [programmatically](#running-programmatically).
 
 ## Getting Started
 
@@ -54,7 +54,7 @@ export default () => <div>Welcome to Rogue.js!</div>
 
 Finally, run `npm run dev` and go to `http://localhost:3000`.
 
-Once you need a more advanced advanced configuration, you can eject from our built-in `client` and server` builds by creating your own `client.js` and `server.js` entry points, respectively. See [#running-programmatically] and [#advanced-usage] for more information.
+Think you'll need a more advanced advanced configuration? You can always eject from our built-in `client` and `server` builds by creating your own `client.js` and `server.js` entry points, respectively. See [running-programmatically](#running-programmatically) and [advanced-usage](#advanced-usage) for more information.
 
 ### Running programmtically
 
