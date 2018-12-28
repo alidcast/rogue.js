@@ -144,9 +144,10 @@ In your `server.js` initialize your Rogue app by passing it your root App compon
 
 ```js
 import rogue from '@roguejs/app/server'
+import { BUNDLE_SRC } from '@roguejs/cli'
 import App from './App'
 
-const app = rouge(App, process.env.BUNDLE_URL)
+const app = rouge(App, BUNDLE_SRC)
 
 app.listen(4000)
 ```
@@ -187,10 +188,11 @@ You can use Rogue with your own custom server. Simply pass [`rogue.render`](#rog
 
 ```js
 import rogue from '@roguejs/app/server'
+import { BUNDLE_SRC } from '@roguejs/cli'
 import express from 'express'
 import App from './app/App'
 
-const app = rouge(App, process.env.BUNDLE_URL)
+const app = rouge(App, BUNDLE_SRC)
 
 const server = express()
 
