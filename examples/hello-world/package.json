@@ -1,0 +1,20 @@
+{
+  "name": "rogue-hello-world-example",
+  "version": "1.0.0",
+  "license": "MIT",
+  "scripts": {
+    "dev": "rogue dev",
+    "build": "rogue build",
+    "start": "rogue start"
+  },
+  "dependencies": {
+    "@roguejs/cli": "0.9.2",
+    "react": "^16.7.0",
+    "react-dom": "^16.7.0",
+    "react-router": "^4.3.1",
+    "react-router-dom": "^4.3.1"
+  },
+  "devDependencies": {
+    "babel-core": "^6.26.3"
+  }
+}

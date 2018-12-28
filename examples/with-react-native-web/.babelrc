@@ -1,8 +1,9 @@
 {
-  "presets": [
-    "razzle/babel"
-  ],
   "plugins": [
-    "react-native-web"
+    ["module-resolver", {
+      "alias": {
+        "^react-native$": "react-native-web"
+      }
+    }]
   ]
 }
