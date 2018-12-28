@@ -1,16 +1,3 @@
-// import Rogue from '@roguejs/app/server.native'
-// import serveStatic from 'serve-static'
-// import ReactDOM from 'react-dom/server'
-// import App from './App'
-
-// const app = new Rogue(App, 'bundle.js')
-
-// app.use(serveStatic(`.rogue/build/public`))
-
-// export default app
-
-// import 'isomorphic-unfetch'
-
 import ReactDOM from 'react-dom/server'
 import { AppRegistry } from 'react-native'
 import Rogue from '@roguejs/app'
@@ -28,6 +15,13 @@ const app = new Rogue(App, {
   },
   bodyTags: [`<script src="bundle.js" defer /></script>`],
 })
+
+// https://github.com/alidcastano/rogue.js/issues/78
+// import Rogue from '@roguejs/app/server.native'
+// import serveStatic from 'serve-static'
+// import ReactDOM from 'react-dom/server'
+// import App from './App'
+// const app = new Rogue(App, 'bundle.js')
 
 app.use(serveStatic(`.rogue/build/public`))
 

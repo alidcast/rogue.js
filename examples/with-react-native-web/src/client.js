@@ -1,8 +1,3 @@
-// import hydrate from'@roguejs/app/client.native'
-// import App from './App'
-
-// hydrate(App)
-
 import { createElement as h } from 'react'
 import { AppRegistry } from 'react-native'
 import { BrowserRouter } from 'react-router-dom'
@@ -18,6 +13,10 @@ AppRegistry.runApplication('App', {
   rootTag: document.getElementById(APP_ID),
 })
 
+// https://github.com/alidcastano/rogue.js/issues/78
+// import hydrate from'@roguejs/app/client.native'
+// import App from './App'
+// hydrate(App)
 
 if (module.hot) {
   module.hot.accept()
