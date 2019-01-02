@@ -60,7 +60,8 @@ function createBundler (env) {
 }
 
 async function prepBuild () {
-  await fs.emptyDir(ROGUE_DIR)
+  // see if not deleting rogue dir will improve performance (and not cause more problems than it solves)
+  // await fs.emptyDir(ROGUE_DIR)
   await fs.emptyDir(TMP_DIR)
   await fs.emptyDir(BUILD_DIR)
 
