@@ -23,7 +23,7 @@ exports.resolveOwn = function (...strs) {
 // fs operations don't resolve files without extensions
 // so we check both js and ts extensions manually
 const resolveFile = exports.resolveFile = function (filePath) {
-  const exts = ['.js', '.jsx', '.ts', '.tsx']
+  const exts = ['.js', '.jsx', '.ts', '.tsx', '.web.js', '.web.jsx', '.web.ts', '.web.tsx']
   for (let i = 0; i < exts.length; i ++) {
     if (fs.existsSync(`${filePath}${exts[i]}`)) return `${filePath}${exts[i]}`
   }
