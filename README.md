@@ -28,6 +28,8 @@ The fastest way to get up and running with rogue is via [@roguejs/cli](#running-
 
 ## Getting Started
 
+Note: roguejs/cli runs on Parcel which is still relatively young and has some [issues](https://github.com/alidcastano/rogue.js/issues/80). If these are blockers for you, for now, you can use Rogue programmatically with another SSR build tool such as [razzle](https://github.com/alidcastano/rogue.js/tree/master/examples/with-razzle/).
+
 ### Running via `@roguejs/cli`
 
 First, install the packages: 
